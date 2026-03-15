@@ -1,18 +1,35 @@
 import { Link } from "react-router-dom";
+import { useMemo } from "react";
 import "./SpellCard.css";
 
+// A reusable card component for displaying spell information in a consistent format.
 function SpellCard({ spell, actionLabel, onAction, disabled = false }) {
   const { index, name, level, school, classes } = spell;
 
-  const levelLabel = level === 0 ? "Cantrip" : `Level ${level}`;
-  const schoolIndex = school?.index || "universal";
-  const schoolName = school?.name || "Unknown";
-  const classNames = classes?.map((c) => c.name).join(", ") || "—";
+  const levelLabel = useMemo(
+    () => (level === 0 ? "Cantrip" : `Level ${level}`),
+    [level],
+  );
 
-  // Map the classic CSS school colors directly to the card's border
-  const cardStyle = {
-    borderColor: `var(--color-school-${schoolIndex}, var(--color-border-card))`,
-  };
+  const { schoolIndex, schoolName } = useMemo(
+    () => ({
+      schoolIndex: school?.index || "universal",
+      schoolName: school?.name || "Unknown",
+    }),
+    [school],
+  );
+
+  const classNames = useMemo(
+    () => classes?.map((c) => c.name).join(", ") || "—",
+    [classes],
+  );
+
+  const cardStyle = useMemo(
+    () => ({
+      borderColor: `var(--color-school-${schoolIndex}, var(--color-border-card))`,
+    }),
+    [schoolIndex],
+  );
 
   return (
     <article className="spell-card" role="listitem" style={cardStyle}>
@@ -39,7 +56,6 @@ function SpellCard({ spell, actionLabel, onAction, disabled = false }) {
         </dl>
 
         <div className="spell-card-actions">
-          {/* Using your classic .btn and .btn-primary classes! */}
           <button
             type="button"
             className="btn btn-primary"
