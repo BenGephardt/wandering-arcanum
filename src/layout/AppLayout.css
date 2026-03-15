@@ -1,0 +1,149 @@
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px 24px;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.app-header-left {
+  min-width: 0;
+}
+
+.app-title {
+  font-family: var(--font-heading);
+  margin: 0 0 4px;
+}
+
+.app-subtitle {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Nav */
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-nav {
+  display: flex;
+  gap: 12px;
+}
+
+.app-nav-link {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: var(--text-main);
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-nav-link:hover {
+  background: var(--bg-card);
+  border-color: var(--border-strong);
+}
+
+.app-nav-link-active {
+  background: var(--accent);
+  color: var(--bg-page);
+  border-color: var(--border-strong);
+}
+
+.app-nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 0.7rem;
+  padding: 0 4px;
+}
+
+/* Body layout */
+.app-layout-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* Sidebar */
+.app-sidebar {
+  background: var(--bg-card);
+  border: 2px solid var(--border-strong);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.sidebar-placeholder {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Main content */
+.app-main {
+  background: var(--bg-card);
+  border: 2px solid var(--border-strong);
+  padding: 16px;
+  border-radius: 8px;
+  min-height: 300px;
+}
+
+/* Footer */
+.app-footer {
+  margin-top: 16px;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-root {
+    padding: 12px 12px 16px;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .app-header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .app-layout-body {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    order: 2;
+  }
+
+  .app-main {
+    order: 1;
+  }
+}
