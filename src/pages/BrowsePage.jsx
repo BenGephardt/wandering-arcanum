@@ -1,8 +1,248 @@
+import { useEffect, useMemo, useState } from "react";
+import { usePreparedSpells } from "../spellbook/usePreparedSpells.js";
+import SpellCard from "../components/SpellCard.jsx";
+import "./BrowsePage.css";
+
+const API_BASE = "https://www.dnd5eapi.co";
+
 function BrowsePage() {
+  const [enrichedSpells, setEnrichedSpells] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const [search, setSearch] = useState("");
+  const [levelFilter, setLevelFilter] = useState("all");
+  const [schoolFilter, setSchoolFilter] = useState("all");
+  const [classFilter, setClassFilter] = useState("all");
+
+  const { preparedSpells, addSpell } = usePreparedSpells();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchSpells() {
+      setLoading(true);
+      setError("");
+
+      try {
+        const res = await fetch(`${API_BASE}/api/spells`);
+        if (!res.ok) throw new Error("Failed to fetch spell index");
+        const data = await res.json();
+        if (cancelled) return;
+
+        const results = data.results || [];
+
+
+        const firstBatch = results.slice(0, 150);
+
+        const detailPromises = firstBatch.map(async (spell) => {
+          try {
+            const detailRes = await fetch(`${API_BASE}${spell.url}`);
+            if (!detailRes.ok) throw new Error("Failed to fetch spell detail");
+            const detail = await detailRes.json();
+            return {
+              index: detail.index,
+              name: detail.name,
+              level: detail.level,
+              school: detail.school,
+              classes: detail.classes,
+            };
+          } catch {
+            return {
+              index: spell.index,
+              name: spell.name,
+              level: null,
+              school: null,
+              classes: [],
+            };
+          }
+        });
+
+        const enriched = await Promise.all(detailPromises);
+        if (!cancelled) {
+          setEnrichedSpells(enriched);
+        }
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) {
+          setError("Unable to fetch spells. Please try again.");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchSpells();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const filteredSpells = useMemo(() => {
+    let list = enrichedSpells;
+
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      list = list.filter((spell) =>
+        spell.name.toLowerCase().includes(q)
+      );
+    }
+
+    if (levelFilter !== "all") {
+      const levelNum = Number(levelFilter);
+      list = list.filter((spell) => spell.level === levelNum);
+    }
+
+    if (schoolFilter !== "all") {
+      list = list.filter(
+        (spell) =>
+          spell.school && spell.school.index === schoolFilter
+      );
+    }
+
+    if (classFilter !== "all") {
+      list = list.filter((spell) =>
+        spell.classes?.some((c) => c.index === classFilter)
+      );
+    }
+
+    return list;
+  }, [enrichedSpells, search, levelFilter, schoolFilter, classFilter]);
+
+  const levelOptions = [
+    { value: "all", label: "All Levels" },
+    { value: "0", label: "Cantrip" },
+    { value: "1", label: "1st" },
+    { value: "2", label: "2nd" },
+    { value: "3", label: "3rd" },
+    { value: "4", label: "4th" },
+    { value: "5", label: "5th" },
+    { value: "6", label: "6th" },
+    { value: "7", label: "7th" },
+    { value: "8", label: "8th" },
+    { value: "9", label: "9th" },
+  ];
+
+  const schoolOptions = useMemo(() => {
+    const unique = new Map();
+    enrichedSpells.forEach((spell) => {
+      if (spell.school) {
+        unique.set(spell.school.index, spell.school.name);
+      }
+    });
+    return [
+      { value: "all", label: "All Schools" },
+      ...Array.from(unique.entries()).map(([value, label]) => ({
+        value,
+        label,
+      })),
+    ];
+  }, [enrichedSpells]);
+
+  const classOptions = useMemo(() => {
+    const unique = new Map();
+    enrichedSpells.forEach((spell) => {
+      (spell.classes || []).forEach((cls) => {
+        unique.set(cls.index, cls.name);
+      });
+    });
+    return [
+      { value: "all", label: "All Classes" },
+      ...Array.from(unique.entries()).map(([value, label]) => ({
+        value,
+        label,
+      })),
+    ];
+  }, [enrichedSpells]);
+
   return (
-    <div>
-      <h2>Browse Spells</h2>
-      <p>The spell grid and filters will be implemented here.</p>
+    <div className="page page-browse">
+      <aside className="sidebar-filters" aria-label="Spell filters">
+        <h2 className="page-title">Spell Index</h2>
+
+        <label className="filter-field">
+          <span>Search</span>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name..."
+          />
+        </label>
+
+        <label className="filter-field">
+          <span>Level</span>
+          <select
+            value={levelFilter}
+            onChange={(e) => setLevelFilter(e.target.value)}
+          >
+            {levelOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="filter-field">
+          <span>School</span>
+          <select
+            value={schoolFilter}
+            onChange={(e) => setSchoolFilter(e.target.value)}
+          >
+            {schoolOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="filter-field">
+          <span>Class</span>
+          <select
+            value={classFilter}
+            onChange={(e) => setClassFilter(e.target.value)}
+          >
+            {classOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </aside>
+
+      <section className="spell-grid-section">
+        {loading && <p>Consulting the Weave...</p>}
+        {!loading && error && <p className="error-text">{error}</p>}
+        {!loading && !error && (
+          <>
+            <p className="results-count">
+              Showing {filteredSpells.length} of {enrichedSpells.length} spells
+            </p>
+            <div
+              className="spell-grid"
+              role="list"
+              aria-label="Spell search results"
+            >
+              {filteredSpells.map((spell) => (
+                <SpellCard
+                  key={spell.index}
+                  spell={spell}
+                  onPrepare={addSpell}
+                  isPrepared={preparedSpells.some(
+                    (s) => s.index === spell.index
+                  )}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </section>
     </div>
   );
 }
