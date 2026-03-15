@@ -1,0 +1,94 @@
+.page-spell-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.spell-detail-header {
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.spell-detail-title {
+  margin: 0;
+  font-family: var(--font-heading);
+}
+
+.spell-detail-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.spell-detail-meta .label {
+  font-weight: 600;
+}
+
+.spell-detail-prepare {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.spell-detail-prepare:hover,
+.spell-detail-prepare:focus-visible {
+  background: var(--accent);
+  color: var(--bg-page);
+}
+
+.spell-detail-prepare:active {
+  transform: translateY(1px);
+}
+
+.spell-detail-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.spell-detail-stats div {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.spell-detail-stats dt {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 4px;
+  color: var(--text-muted);
+}
+
+.spell-detail-stats dd {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.spell-detail-description h3 {
+  margin-top: 0;
+  font-family: var(--font-heading);
+}
+
+.spell-detail-description p {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.error-text {
+  color: #b00020;
+}
