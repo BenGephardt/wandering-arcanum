@@ -1,17 +1,4 @@
-:root {
-  --bg-parchment: #f9f7f1;
-  --text-main: #2c2c2c;
-  --font-heading: "Cinzel", serif;
-  --font-body: "Crimson Text", serif;
-  --font-ui: "Lato", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-body);
-  background: var(--bg-parchment);
-  color: var(--text-main);
-}
+/* src/App.css */
 
 .app-root {
   min-height: 100vh;
@@ -19,22 +6,51 @@ body {
 }
 
 .app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 24px;
 }
 
 .app-title {
   font-family: var(--font-heading);
-  margin: 0 0 8px;
+  margin: 0 0 4px;
 }
 
 .app-subtitle {
   margin: 0;
   font-family: var(--font-ui);
   font-size: 0.95rem;
-  opacity: 0.8;
+  color: var(--text-muted);
 }
 
 .app-main {
   font-size: 1rem;
 }
 
+/* Theme toggle button */
+.theme-toggle {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--accent);
+  color: var(--bg-page);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle:active {
+  transform: translateY(1px);
+}
