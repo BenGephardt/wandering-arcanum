@@ -1,99 +1,15 @@
-.spell-card {
-  background: var(--bg-card);
-  border: 2px solid var(--border-strong);
-  border-radius: 8px;
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.spell-card { position: relative; background-color: var(--color-bg-elevated); border-radius: var(--radius-card); border: 2px solid var(--color-border-card); box-shadow: var(--shadow-soft); padding: 0; overflow: hidden; }
+.spell-card::before { content: ""; position: absolute; inset: 6px; border-radius: calc(var(--radius-card) - 6px); border: 1px solid rgba(255, 255, 255, 0.45); pointer-events: none; }
+.spell-card-inner { position: relative; padding: 0.8rem 0.85rem 0.9rem; }
 
-.spell-card-header {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
+.spell-title { font-family: var(--font-heading); font-size: 1rem; margin: 0 0 0.5rem; }
+.spell-title-link { text-decoration: none; color: var(--color-ink); }
+.spell-title-link:hover, .spell-title-link:focus-visible { text-decoration: underline; }
 
-.spell-card-title {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: 1rem;
-}
+.spell-meta { margin: 0 0 0.6rem; display: grid; gap: 0.25rem; }
+.spell-meta-row { display: flex; justify-content: space-between; gap: 0.5rem; }
+.spell-meta-row dt { font-family: var(--font-ui); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-ink-muted); }
+.spell-meta-row dd { margin: 0; font-size: 0.86rem; }
 
-.spell-card-title a {
-  color: var(--text-main);
-  text-decoration: none;
-}
-
-.spell-card-title a:hover,
-.spell-card-title a:focus-visible {
-  text-decoration: underline;
-}
-
-.spell-card-meta {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.spell-card-classes {
-  margin: 0;
-  font-size: 0.85rem;
-}
-
-.spell-card-classes .label {
-  font-weight: 600;
-}
-
-.spell-card-actions {
-  margin-top: 8px;
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  align-items: center;
-}
-
-.spell-card-link {
-  font-family: var(--font-ui);
-  font-size: 0.85rem;
-  text-decoration: none;
-  color: var(--text-main);
-  padding: 4px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--border-strong);
-  background: transparent;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.spell-card-link:hover,
-.spell-card-link:focus-visible {
-  background: var(--accent);
-  color: var(--bg-page);
-}
-
-.spell-card-prepare {
-  font-family: var(--font-ui);
-  font-size: 0.85rem;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border-strong);
-  background: var(--bg-card);
-  color: var(--text-main);
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
-}
-
-.spell-card-prepare:hover:not(:disabled),
-.spell-card-prepare:focus-visible:not(:disabled) {
-  background: var(--accent);
-  color: var(--bg-page);
-}
-
-.spell-card-prepare:active:not(:disabled) {
-  transform: translateY(1px);
-}
-
-.spell-card-prepare:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
+.spell-card-actions { display: flex; justify-content: flex-end; }
+.spell-card-prepared { border-style: double; }
