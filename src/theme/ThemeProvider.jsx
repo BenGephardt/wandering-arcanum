@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { ThemeContext } from "./ThemeContext.js";
 import { THEME_MODES, THEME_STORAGE_KEY } from "./themeConstants.js";
 
+// Retrieves the initial theme from localStorage or defaults to LIGHT if not set or on error.
 function getInitialTheme() {
   if (typeof window === "undefined") {
     return THEME_MODES.LIGHT;
@@ -23,6 +24,7 @@ function getInitialTheme() {
   return THEME_MODES.LIGHT;
 }
 
+// ThemeProvider manages the application's theme state and provides it to child components via context.
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(getInitialTheme);
 
