@@ -1,26 +1,27 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { useTheme } from "../theme/useTheme.js";
 import { THEME_MODES } from "../theme/themeConstants.js";
 import { usePreparedSpells } from "../spellbook/usePreparedSpells.js";
 import "./AppLayout.css";
 
+// Defines the overall layout of the application.
 function AppLayout() {
   const { theme, cycleTheme } = useTheme();
   const { preparedSpells } = usePreparedSpells();
 
   const nextLabel =
     theme === THEME_MODES.LIGHT
-      ? "Switch to Dark Mode"
+      ? "Switch to Torchlight"
       : theme === THEME_MODES.DARK
-        ? "Switch to Darkvision Mode"
-        : "Switch to Light Mode";
+        ? "Switch to Darkvision"
+        : "Switch to Daylight";
 
   const buttonText =
     theme === THEME_MODES.LIGHT
-      ? "Light"
+      ? "Torchlight"
       : theme === THEME_MODES.DARK
-        ? "Dark"
-        : "Darkvision";
+        ? "Darkvision"
+        : "Daylight";
 
   const preparedCount = preparedSpells.length;
 
@@ -29,12 +30,14 @@ function AppLayout() {
       <header className="app-header" role="banner">
         <div className="header-inner">
           <div className="brand">
-            {/* The new brand lockup from your old CSS */}
-            <div className="brand-mark">
-              <span className="brand-kicker">Wandering Arcanum</span>
-              <span className="brand-main">Spell Browser</span>
-              <span className="brand-sub">D&D 5e</span>
-            </div>
+            <Link to="/" className="brand-mark">
+              <span className="brand-main">
+                Wandering <span className="text-accent">Arcanum</span>
+              </span>
+              <span className="brand-sub">
+                A Spellbook and Browser <span className="brand-divider">✦</span> 5e
+              </span>
+            </Link>
           </div>
 
           <nav className="main-nav" aria-label="Main navigation">
@@ -43,6 +46,7 @@ function AppLayout() {
               className={({ isActive }) =>
                 "nav-link" + (isActive ? " nav-link-active" : "")
               }
+              aria-current={({ isActive }) => (isActive ? "page" : undefined)}
               end
             >
               Browse
@@ -52,6 +56,7 @@ function AppLayout() {
               className={({ isActive }) =>
                 "nav-link" + (isActive ? " nav-link-active" : "")
               }
+              aria-current={({ isActive }) => (isActive ? "page" : undefined)}
             >
               My Spellbook
               {preparedCount > 0 && (
@@ -59,7 +64,6 @@ function AppLayout() {
               )}
             </NavLink>
 
-            {/* Using your classic .btn and .btn-ghost classes! */}
             <button
               type="button"
               className="btn btn-ghost theme-toggle"
