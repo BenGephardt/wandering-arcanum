@@ -1,0 +1,20 @@
+.page-spellbook-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.page-spellbook-header .page-title {
+  margin-bottom: 0;
+}
+
+.page-spellbook .spell-grid {
+  margin-top: 0.6rem;
+}
+
+.empty-state {
+  margin-top: 0.25rem;
+  font-family: var(--font-ui);
+  color: var(--color-ink-muted);
+}
