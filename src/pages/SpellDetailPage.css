@@ -1,15 +1,34 @@
+/* --- DETAIL PAGE STYLES --- */
 .page-detail {
+  position: relative;
   background-color: var(--color-bg-elevated);
+  background-image: 
+    var(--texture-paper),
+    radial-gradient(ellipse at center, transparent 40%, rgba(106, 87, 64, 0.12) 100%);
+  background-blend-mode: multiply, normal;
+
   border-radius: var(--radius-card);
   border: 2px solid var(--color-border-subtle);
-  box-shadow: var(--shadow-soft);
-  padding: 1.2rem 1.3rem 1.4rem;
+  box-shadow: var(--shadow-soft), inset 0 0 40px rgba(0, 0, 0, 0.05);
+  
+  padding: 1.5rem; 
+  overflow: hidden;
 }
 
+/* --- DARK & DARKVISION ADJUSTMENTS --- */
+:root[data-theme="dark"] .page-detail,
+:root[data-theme="darkvision"] .page-detail {
+  background-image: 
+    var(--texture-paper),
+    radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+  background-blend-mode: overlay, normal;
+}
+
+/* --- DETAIL HEADER --- */
 .detail-header {
   border-bottom: 2px double var(--color-border-subtle);
   padding-bottom: 0.8rem;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -18,21 +37,24 @@
 .detail-sub {
   font-family: var(--font-ui);
   font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   color: var(--color-ink-muted);
-  margin-bottom: 0.6rem;
 }
 
+/* --- GRID LAYOUT --- */
 .detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
-  gap: 1rem 1.5rem;
+  gap: 1.5rem 2rem;
 }
 
 .detail-stats {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.6rem;
 }
 
 .detail-stat dt {
@@ -44,16 +66,19 @@
 }
 
 .detail-stat dd {
-  margin: 0.05rem 0 0.3rem;
-  font-size: 0.9rem;
+  margin: 0.05rem 0 0.4rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
+/* --- TYPOGRAPHY & BLOCKS --- */
 .section-title {
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.1rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.6rem;
+  color: var(--color-ink);
 }
 
 .section-subtitle {
@@ -61,16 +86,31 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  margin: 0.8rem 0 0.2rem;
+  margin: 1.2rem 0 0.4rem;
+  color: var(--color-ink-muted);
 }
 
 .detail-description p {
-  margin: 0 0 0.5rem;
-  line-height: 1.5;
+  margin: 0 0 0.75rem;
+  line-height: 1.6;
 }
 
+/* --- ACTIONS --- */
+.detail-actions {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .detail-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+  
+  .page-detail {
+    padding: 1.2rem;
   }
 }
