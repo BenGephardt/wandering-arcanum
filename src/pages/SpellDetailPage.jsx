@@ -12,7 +12,6 @@ function SpellDetailPage() {
   const [error, setError] = useState("");
 
   const { preparedSpells, addSpell, removeSpell } = usePreparedSpells();
-
   const isPrepared = preparedSpells.some((s) => s.index === index);
 
   useEffect(() => {
@@ -26,57 +25,34 @@ function SpellDetailPage() {
         const res = await fetch(`${API_BASE}/api/spells/${index}`);
         if (!res.ok) throw new Error("Failed to fetch spell details");
         const data = await res.json();
-        if (!cancelled) {
-          setSpell(data);
-        }
+        if (!cancelled) setSpell(data);
       } catch (e) {
         console.error(e);
-        if (!cancelled) {
-          setError("Unable to load this spell. Please try again.");
-        }
+        if (!cancelled) setError("Unable to load this spell. Please try again.");
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
 
     fetchSpell();
-
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [index]);
 
   if (loading) {
-    return (
-      <section className="page page-spell-detail">
-        <p>Consulting the Weave...</p>
-      </section>
-    );
+    return <p className="status status-loading">Consulting the Weave...</p>;
   }
 
   if (error) {
-    return (
-      <section className="page page-spell-detail">
-        <p className="error-text">{error}</p>
-      </section>
-    );
+    return <p className="status status-error">{error}</p>;
   }
 
   if (!spell) {
-    return (
-      <section className="page page-spell-detail">
-        <p className="error-text">Spell not found.</p>
-      </section>
-    );
+    return <p className="status status-error">Spell not found.</p>;
   }
 
-  const levelLabel =
-    spell.level === 0 ? "Cantrip" : `Level ${spell.level}`;
+  const levelLabel = spell.level === 0 ? "Cantrip" : `Level ${spell.level}`;
   const schoolName = spell.school?.name || "Unknown";
-  const classNames =
-    spell.classes?.map((c) => c.name).join(", ") || "—";
+  const classNames = spell.classes?.map((c) => c.name).join(", ") || "—";
 
   const handlePrepareClick = () => {
     if (isPrepared) {
@@ -93,71 +69,80 @@ function SpellDetailPage() {
   };
 
   return (
-    <section className="page page-spell-detail">
-      <header className="spell-detail-header">
-        <h2 className="spell-detail-title">{spell.name}</h2>
-        <p className="spell-detail-meta">
+    <article className="page-detail">
+      <header className="detail-header">
+        <h2 className="page-title" style={{ marginBottom: "0.25rem" }}>
+          {spell.name}
+        </h2>
+        <p className="detail-sub">
           {levelLabel} • {schoolName}
         </p>
-        <p className="spell-detail-meta">
-          <span className="label">Classes:</span> {classNames}
-        </p>
 
-        <button
-          type="button"
-          className="spell-detail-prepare"
-          onClick={handlePrepareClick}
-        >
-          {isPrepared ? "Remove from Spellbook" : "Prepare Spell"}
-        </button>
+        <div>
+          <button
+            type="button"
+            className={`btn ${isPrepared ? "btn-ghost" : "btn-primary"}`}
+            onClick={handlePrepareClick}
+          >
+            {isPrepared ? "Remove from Spellbook" : "Prepare Spell"}
+          </button>
+        </div>
       </header>
 
-      <dl className="spell-detail-stats">
-        <div>
-          <dt>Casting Time</dt>
-          <dd>{spell.casting_time}</dd>
-        </div>
-        <div>
-          <dt>Range</dt>
-          <dd>{spell.range}</dd>
-        </div>
-        <div>
-          <dt>Components</dt>
-          <dd>
-            {spell.components?.join(", ")}
-            {spell.material && ` (${spell.material})`}
-          </dd>
-        </div>
-        <div>
-          <dt>Duration</dt>
-          <dd>{spell.duration}</dd>
-        </div>
-        <div>
-          <dt>Concentration</dt>
-          <dd>{spell.concentration ? "Yes" : "No"}</dd>
-        </div>
-        <div>
-          <dt>Ritual</dt>
-          <dd>{spell.ritual ? "Yes" : "No"}</dd>
-        </div>
-      </dl>
+      <div className="detail-grid">
+        <aside>
+          <dl className="detail-stats">
+            <div className="detail-stat">
+              <dt>Classes</dt>
+              <dd>{classNames}</dd>
+            </div>
+            <div className="detail-stat">
+              <dt>Casting Time</dt>
+              <dd>{spell.casting_time}</dd>
+            </div>
+            <div className="detail-stat">
+              <dt>Range</dt>
+              <dd>{spell.range}</dd>
+            </div>
+            <div className="detail-stat">
+              <dt>Components</dt>
+              <dd>
+                {spell.components?.join(", ")}
+                {spell.material && ` (${spell.material})`}
+              </dd>
+            </div>
+            <div className="detail-stat">
+              <dt>Duration</dt>
+              <dd>{spell.duration}</dd>
+            </div>
+            <div className="detail-stat">
+              <dt>Concentration</dt>
+              <dd>{spell.concentration ? "Yes" : "No"}</dd>
+            </div>
+            <div className="detail-stat">
+              <dt>Ritual</dt>
+              <dd>{spell.ritual ? "Yes" : "No"}</dd>
+            </div>
+          </dl>
+        </aside>
 
-      <section className="spell-detail-description">
-        <h3>Description</h3>
-        {spell.desc?.map((para, i) => (
-          <p key={i}>{para}</p>
-        ))}
+        <section className="detail-description">
+          <h3 className="section-title">Description</h3>
+          {spell.desc?.map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
 
-        {spell.higher_level && spell.higher_level.length > 0 && (
-          <>
-            <h3>At Higher Levels</h3>
-            {spell.higher_level.map((para, i) => (
-              <p key={i}>{para}</p>
-            ))}
-          </>
-        )}
-      </section>
-    </section>
+          {spell.higher_level && spell.higher_level.length > 0 && (
+            <>
+              <h4 className="section-subtitle">At Higher Levels</h4>
+              {spell.higher_level.map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </>
+          )}
+        </section>
+      </div>
+    </article>
   );
 }
 
