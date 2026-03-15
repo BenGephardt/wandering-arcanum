@@ -1,15 +1,19 @@
+/* --- BROWSE PAGE STYLES --- */
 .page-browse { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 1.5rem; }
 
+/* --- SIDEBAR & FILTERS --- */
 .sidebar-filters { background-color: var(--color-bg-elevated); border-radius: var(--radius-card); border: 2px solid var(--color-border-subtle); box-shadow: var(--shadow-soft); padding: 1rem 0.9rem 1.1rem; position: sticky; top: 4.25rem; align-self: flex-start; }
 
+/* --- SPELL GRID & CARDS --- */
 .spell-grid-section { min-height: 60vh; }
 .spell-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1rem; }
 
-/* Status text for loading/errors */
+/* --- STATUS & EMPTY STATES --- */
 .status { font-family: var(--font-ui); border-radius: 9px; padding: 0.7rem 0.8rem; margin-bottom: 0.8rem; }
 .status-loading { background-color: rgba(59, 74, 99, 0.1); border: 1px solid rgba(59, 74, 99, 0.35); }
 .status-error { background-color: rgba(124, 31, 38, 0.12); border: 1px solid rgba(124, 31, 38, 0.6); }
 
+/* --- RESPONSIVE ADJUSTMENTS --- */
 @media (max-width: 768px) {
   .page-browse { grid-template-columns: minmax(0, 1fr); }
   .sidebar-filters { position: static; }
