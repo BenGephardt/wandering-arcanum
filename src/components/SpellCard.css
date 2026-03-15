@@ -1,15 +1,127 @@
-.spell-card { position: relative; background-color: var(--color-bg-elevated); border-radius: var(--radius-card); border: 2px solid var(--color-border-card); box-shadow: var(--shadow-soft); padding: 0; overflow: hidden; }
-.spell-card::before { content: ""; position: absolute; inset: 6px; border-radius: calc(var(--radius-card) - 6px); border: 1px solid rgba(255, 255, 255, 0.45); pointer-events: none; }
-.spell-card-inner { position: relative; padding: 0.8rem 0.85rem 0.9rem; }
+.spell-card {
+  --spell-card-radius: 2% 3% 2% 4% / 3% 2% 4% 2%;
+  --spell-card-rotation: 0deg;
+  --spell-card-vignette-color: rgba(106, 87, 64, 0.12);
+  --spell-card-vignette-stop: 30%;
+  --spell-card-vignette-blend: multiply;
+  --spell-card-inner-inset: 6px;
 
-.spell-title { font-family: var(--font-heading); font-size: 1rem; margin: 0 0 0.5rem; }
-.spell-title-link { text-decoration: none; color: var(--color-ink); }
-.spell-title-link:hover, .spell-title-link:focus-visible { text-decoration: underline; }
+  position: relative;
+  background-color: var(--color-bg-elevated);
+  background-image: 
+    var(--texture-paper),
+    radial-gradient(ellipse at center, transparent var(--spell-card-vignette-stop), var(--spell-card-vignette-color) 100%);
+  background-blend-mode: var(--spell-card-vignette-blend), normal;
+  border-radius: var(--spell-card-radius);
+  border: 2px solid var(--color-border-card);
+  box-shadow: var(--shadow-soft), inset 0 0 20px rgba(142, 142, 142, 0.05);
+  padding: 0;
+  overflow: hidden;
+  transform: rotate(var(--spell-card-rotation)) translateZ(0);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
 
-.spell-meta { margin: 0 0 0.6rem; display: grid; gap: 0.25rem; }
-.spell-meta-row { display: flex; justify-content: space-between; gap: 0.5rem; }
-.spell-meta-row dt { font-family: var(--font-ui); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-ink-muted); }
-.spell-meta-row dd { margin: 0; font-size: 0.86rem; }
+/* --- DARK & DARKVISION ADJUSTMENTS --- */
+:root[data-theme="dark"] .spell-card,
+:root[data-theme="darkvision"] .spell-card {
+  --spell-card-vignette-color: rgba(0, 0, 0, 0.4);
+  --spell-card-vignette-blend: overlay;
+}
 
-.spell-card-actions { display: flex; justify-content: flex-end; }
-.spell-card-prepared { border-style: double; }
+/* --- VARIATIONS --- */
+.spell-card:nth-child(even) { --spell-card-rotation: 0.2deg; }
+.spell-card:nth-child(odd) { --spell-card-rotation: -0.2deg; }
+.spell-card:nth-child(2n) {
+  --spell-card-radius: 3% 2% 4% 2% / 2% 4% 2% 3%;
+}
+.spell-card:nth-child(3n) {
+  --spell-card-radius: 2% 4% 2% 3% / 4% 2% 3% 2%;
+  --spell-card-rotation: 0.4deg;
+}
+.spell-card:nth-child(5n) {
+  --spell-card-radius: 4% 2% 3% 2% / 2% 3% 2% 4%;
+}
+.spell-card:nth-child(7n) {
+  --spell-card-radius: 3% 4% 2% 2% / 2% 2% 4% 3%;
+  --spell-card-rotation: -0.3deg;
+}
+
+/* --- CARD CONTENT --- */
+.spell-card::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
+.spell-card-inner {
+  position: relative;
+  padding: 0.8rem 0.85rem 0.9rem;
+  transform: translateZ(0);
+}
+
+.spell-title { 
+  font-family: var(--font-heading); 
+  font-size: 1rem; 
+  margin: 0 0 0.5rem; 
+  transform: translateZ(0);
+}
+
+.spell-title-link { 
+  text-decoration: none; 
+  color: var(--color-ink); 
+  display: inline-block;
+}
+
+.spell-title-link:hover { 
+  text-decoration: underline; 
+}
+
+/* --- METADATA & ACTIONS --- */
+.spell-meta { 
+  margin: 0 0 0.6rem; 
+  display: grid; 
+  gap: 0.25rem; 
+}
+
+.spell-meta-row { 
+  display: flex; 
+  justify-content: space-between; 
+  gap: 0.5rem;
+  text-align: right;
+}
+
+.spell-meta-row dt { 
+  font-family: var(--font-ui); 
+  font-size: 0.75rem; 
+  text-transform: uppercase; 
+  letter-spacing: 0.14em; 
+  color: var(--color-ink-muted); 
+}
+
+.spell-meta-row dd { 
+  margin: 0; 
+  font-size: 0.86rem; 
+}
+
+.spell-card-actions { 
+  display: flex; 
+  justify-content: flex-end; 
+}
+
+.spell-card-prepared { 
+  border-style: double; 
+}
+
+/* --- INTERACTION & ACCESSIBILITY --- */
+.spell-title-link:focus-visible,
+.spell-card-actions button:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.spell-title-link {
+  cursor: pointer;
+}
