@@ -2,7 +2,7 @@ function BrowsePage() {
   return (
     <div>
       <h2>Browse Spells</h2>
-      <p>Spell grid and filters will go here.</p>
+      <p>The spell grid and filters will be implemented here.</p>
     </div>
   );
 }
