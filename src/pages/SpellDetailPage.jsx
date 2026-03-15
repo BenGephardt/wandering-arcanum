@@ -5,6 +5,7 @@ import "./SpellDetailPage.css";
 
 const API_BASE = "https://www.dnd5eapi.co";
 
+// Responsible for displaying detailed information about a specific spell.
 function SpellDetailPage() {
   const { index } = useParams();
   const [spell, setSpell] = useState(null);
