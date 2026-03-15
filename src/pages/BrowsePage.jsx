@@ -5,6 +5,7 @@ import "./BrowsePage.css";
 
 const API_BASE = "https://www.dnd5eapi.co";
 
+// Responsible for fetching and enriching spells from the D&D 5e API.
 function BrowsePage() {
   const [enrichedSpells, setEnrichedSpells] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +18,7 @@ function BrowsePage() {
 
   const { preparedSpells, addSpell } = usePreparedSpells();
 
+  // Fetch the list of spells and their details when the component mounts.
   useEffect(() => {
     let cancelled = false;
 
@@ -24,6 +26,7 @@ function BrowsePage() {
       setLoading(true);
       setError("");
 
+      // Fetch the first 150 spells to limit the number of requests and data we need to handle.tails.
       try {
         const res = await fetch(`${API_BASE}/api/spells`);
         if (!res.ok) throw new Error("Failed to fetch spell index");
@@ -56,6 +59,7 @@ function BrowsePage() {
           }
         });
 
+        // Waits for all detail requests to complete and enrich the spells with their details.
         const enriched = await Promise.all(detailPromises);
         if (!cancelled) {
           setEnrichedSpells(enriched);
@@ -68,12 +72,14 @@ function BrowsePage() {
       }
     }
 
+    // Fetch spells when the component mounts.
     fetchSpells();
     return () => {
       cancelled = true;
     };
   }, []);
 
+  // Computes the list of spells to display based on the current search query and filter selections.
   const filteredSpells = useMemo(() => {
     let list = enrichedSpells;
 
@@ -102,6 +108,7 @@ function BrowsePage() {
     return list;
   }, [enrichedSpells, search, levelFilter, schoolFilter, classFilter]);
 
+  // Defines the options for the level, school, and class filters.
   const levelOptions = [
     { value: "all", label: "All Levels" },
     { value: "0", label: "Cantrip" },
@@ -146,11 +153,20 @@ function BrowsePage() {
     ];
   }, [enrichedSpells]);
 
+  const resetFilters = () => {
+    setSearch("");
+    setLevelFilter("all");
+    setSchoolFilter("all");
+    setClassFilter("all");
+  };
+
+  // Renders the browse page with a sidebar for filters and a main section for displaying spells.
   return (
     <div className="page-browse">
       <aside className="sidebar-filters" aria-label="Spell filters">
         <h2 className="page-title">Spell Index</h2>
 
+        {/* --- FILTER FIELDS --- */}
         <label className="field">
           <span className="field-label">Search</span>
           <input
@@ -208,6 +224,7 @@ function BrowsePage() {
         </label>
       </aside>
 
+      {/* --- SPELL GRID & STATES --- */}
       <section className="spell-grid-section">
         {loading && (
           <p className="status status-loading">Consulting the Weave...</p>
@@ -215,32 +232,49 @@ function BrowsePage() {
         {!loading && error && (
           <p className="status status-error">{error}</p>
         )}
+        
         {!loading && !error && (
           <>
-            <p className="field-label" style={{ marginBottom: "1rem" }}>
-              Showing {filteredSpells.length} of {enrichedSpells.length} spells
-            </p>
-            <div
-              className="spell-grid"
-              role="list"
-              aria-label="Spell search results"
-            >
-              {filteredSpells.map((spell) => {
-                const isPrepared = preparedSpells.some(
-                  (s) => s.index === spell.index,
-                );
+            {filteredSpells.length === 0 ? (
+              <div className="empty-state-container">
+                <p className="empty-state-text">
+                  The Weave reveals a magical void. No spell matches these parameters in our current mortal world.
+                </p>
+                <button 
+                  className="btn btn-ghost" 
+                  onClick={resetFilters} 
+                >
+                  Clear Filters
+                </button>
+              </div>
+            ) : (
+              <>
+                <p className="field-label" style={{ marginBottom: "1rem" }}>
+                  Showing {filteredSpells.length} of {enrichedSpells.length} spells
+                </p>
+                <div
+                  className="spell-grid"
+                  role="list"
+                  aria-label="Spell search results"
+                >
+                  {filteredSpells.map((spell) => {
+                    const isPrepared = preparedSpells.some(
+                      (s) => s.index === spell.index,
+                    );
 
-                return (
-                  <SpellCard
-                    key={spell.index}
-                    spell={spell}
-                    actionLabel={isPrepared ? "Prepared" : "Prepare Spell"}
-                    onAction={addSpell}
-                    disabled={isPrepared}
-                  />
-                );
-              })}
-            </div>
+                    return (
+                      <SpellCard
+                        key={spell.index}
+                        spell={spell}
+                        actionLabel={isPrepared ? "Prepared" : "Prepare Spell"}
+                        onAction={addSpell}
+                        disabled={isPrepared}
+                      />
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </>
         )}
       </section>
