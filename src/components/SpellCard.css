@@ -1,0 +1,99 @@
+.spell-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spell-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spell-card-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+}
+
+.spell-card-title a {
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.spell-card-title a:hover,
+.spell-card-title a:focus-visible {
+  text-decoration: underline;
+}
+
+.spell-card-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.spell-card-classes {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.spell-card-classes .label {
+  font-weight: 600;
+}
+
+.spell-card-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.spell-card-link {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--text-main);
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.spell-card-link:hover,
+.spell-card-link:focus-visible {
+  background: var(--accent);
+  color: var(--bg-page);
+}
+
+.spell-card-prepare {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+.spell-card-prepare:hover:not(:disabled),
+.spell-card-prepare:focus-visible:not(:disabled) {
+  background: var(--accent);
+  color: var(--bg-page);
+}
+
+.spell-card-prepare:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.spell-card-prepare:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
