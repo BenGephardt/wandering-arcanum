@@ -1,0 +1,40 @@
+:root {
+  --bg-parchment: #f9f7f1;
+  --text-main: #2c2c2c;
+  --font-heading: "Cinzel", serif;
+  --font-body: "Crimson Text", serif;
+  --font-ui: "Lato", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--bg-parchment);
+  color: var(--text-main);
+}
+
+.app-root {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.app-header {
+  margin-bottom: 24px;
+}
+
+.app-title {
+  font-family: var(--font-heading);
+  margin: 0 0 8px;
+}
+
+.app-subtitle {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.app-main {
+  font-size: 1rem;
+}
+
