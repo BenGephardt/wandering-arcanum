@@ -1,54 +1,82 @@
+/* SECTION: CSS Reset & Base */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { min-height: 100vh; font-family: var(--font-body); background-color: var(--color-bg); color: var(--color-ink); -webkit-font-smoothing: antialiased; }
+
+/* SECTION: Design Tokens */
 :root {
-  --font-heading: "Cinzel", serif;
-  --font-body: "Crimson Text", serif;
+  --color-bg: #f9f7f1; 
+  --color-bg-elevated: #f4f0e5;
+  --color-ink: #2c2c2c; 
+  --color-ink-muted: #4c4337;
+  --color-border-subtle: #cbbda2;
+  --color-border-strong: #6a5740;
+  --color-accent: #b34d2e;
+  --color-accent-soft: #e0b38a;
+
+  --color-school-abjuration: #2d6a8a;
+  --color-school-conjuration: #4f7c4f;
+  --color-school-divination: #7c5ca3;
+  --color-school-enchantment: #a6507a;
+  --color-school-evocation: #b84432;
+  --color-school-illusion: #4f6b9c;
+  --color-school-necromancy: #5c3b7a;
+  --color-school-transmutation: #a37b3b;
+
+  --color-border-card: #9a8560;
+  --color-status-error: #7c1f26;
+  --color-status-loading: #3b4a63;
+
+  --theme-light-bg: #f9f7f1;
+  --theme-light-bg-elevated: #f4f0e5;
+  --theme-light-ink: #2c2c2c;
+
+  --theme-dark-bg: #1a120d;
+  --theme-dark-bg-elevated: #261710;
+  --theme-dark-ink: #f5efe1;
+
+  --theme-darkvision-bg: #0f1011;
+  --theme-darkvision-bg-elevated: #151618;
+  --theme-darkvision-ink: #f5f5f5;
+
+  --font-heading: "Cinzel", "Times New Roman", serif;
+  --font-body: "Crimson Text", Georgia, serif;
   --font-ui: "Lato", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-card: 12px;
+  --shadow-soft: 0 16px 30px rgba(0, 0, 0, 0.12);
+  --transition-fast: 0.18s ease-out;
 }
 
-/* Light theme */
-:root[data-theme="light"] {
-  --bg-page: #f9f7f1;
-  --bg-card: #fdfbf5;
-  --text-main: #2c2c2c;
-  --text-muted: #555555;
-  --border-strong: #3a2a1a;
-  --accent: #8b5a2b;
-}
-
-/* Dark theme */
-:root[data-theme="dark"] {
-  --bg-page: #1d130f;
-  --bg-card: #261813;
-  --text-main: #f4e9d8;
-  --text-muted: #d0c2aa;
-  --border-strong: #f4e9d8;
-  --accent: #e0a96d;
-}
-
-/* Darkvision (high-contrast grayscale) */
+/* SECTION: Theme Modes */
+:root[data-theme="light"] { --color-bg: var(--theme-light-bg); --color-bg-elevated: var(--theme-light-bg-elevated); --color-ink: var(--theme-light-ink); }
+:root[data-theme="dark"] { --color-bg: var(--theme-dark-bg); --color-bg-elevated: var(--theme-dark-bg-elevated); --color-ink: var(--theme-dark-ink); --color-border-subtle: #4c3a2c; --color-border-strong: #f0e0c7; }
 :root[data-theme="darkvision"] {
-  --bg-page: #050505;
-  --bg-card: #111111;
-  --text-main: #ffffff;
-  --text-muted: #cccccc;
-  --border-strong: #ffffff;
-  --accent: #ffffff;
+  --color-bg: var(--theme-darkvision-bg); --color-bg-elevated: var(--theme-darkvision-bg-elevated); --color-ink: var(--theme-darkvision-ink); --color-border-subtle: #4b4d51; --color-border-strong: #f5f5f5;
+  --color-school-abjuration: #d0d0d0; --color-school-conjuration: #bfbfbf; --color-school-divination: #e0e0e0; --color-school-enchantment: #c7c7c7; --color-school-evocation: #ffffff; --color-school-illusion: #dedede; --color-school-necromancy: #f0f0f0; --color-school-transmutation: #b0b0b0;
 }
 
-/* Base global styles use the variables */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
+/* SECTION: Global App Background */
+.app-root {
   min-height: 100vh;
-  background: var(--bg-page);
-  color: var(--text-main);
-  font-family: var(--font-body);
+  background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.2), transparent 55%), radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.18), transparent 55%), repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 3px);
 }
 
-#root {
-  min-height: 100vh;
-}
+/* SECTION: Reusable UI Controls */
+.btn { font-family: var(--font-ui); font-size: 0.86rem; border-radius: 999px; padding: 0.4rem 0.9rem; border: 1px solid transparent; cursor: pointer; background: none; color: var(--color-ink); transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast); }
+.btn-primary { background: linear-gradient(135deg, var(--color-accent) 0%, #7b2e1c 100%); color: #fdf7ed; border-color: rgba(0, 0, 0, 0.25); box-shadow: 0 7px 14px rgba(0, 0, 0, 0.25); }
+.btn-primary:hover, .btn-primary:focus-visible { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); }
+.btn-primary:disabled { opacity: 0.75; cursor: default; box-shadow: none; }
+.btn-ghost { border-color: var(--color-border-subtle); background-color: rgba(0, 0, 0, 0.02); }
+.btn-ghost:hover, .btn-ghost:focus-visible { background-color: rgba(0, 0, 0, 0.06); }
+
+.input { font-family: var(--font-ui); font-size: 0.9rem; width: 100%; padding: 0.4rem 0.6rem; border-radius: 7px; border: 1px solid var(--color-border-subtle); background-color: rgba(255, 255, 255, 0.85); color: var(--color-ink); transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast); }
+.input:focus-visible { outline: none; border-color: var(--color-border-strong); box-shadow: 0 0 0 2px rgba(179, 77, 46, 0.45); }
+.input-select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--color-ink) 50%), linear-gradient(135deg, var(--color-ink) 50%, transparent 50%); background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
+
+.field { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.75rem; }
+.field-label { font-family: var(--font-ui); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.15em; }
+
+.page-title { font-family: var(--font-heading); font-size: 1.4rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 0.85rem; }
+
+:focus-visible { outline: 2px solid var(--color-border-strong); outline-offset: 2px; }
