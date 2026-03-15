@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { PreparedSpellsContext } from "./PreparedSpellsContext.js";
 import { PREPARED_SPELLS_STORAGE_KEY } from "./spellbookConstants.js";
 
+// Manages the state of prepared spells and provides functions to add, remove, and clear spells.
 function getInitialPreparedSpells() {
   if (typeof window === "undefined") return [];
 
