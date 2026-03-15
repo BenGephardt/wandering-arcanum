@@ -31,8 +31,6 @@ function BrowsePage() {
         if (cancelled) return;
 
         const results = data.results || [];
-
-
         const firstBatch = results.slice(0, 150);
 
         const detailPromises = firstBatch.map(async (spell) => {
@@ -64,18 +62,13 @@ function BrowsePage() {
         }
       } catch (e) {
         console.error(e);
-        if (!cancelled) {
-          setError("Unable to fetch spells. Please try again.");
-        }
+        if (!cancelled) setError("Unable to fetch spells. Please try again.");
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
 
     fetchSpells();
-
     return () => {
       cancelled = true;
     };
@@ -86,9 +79,7 @@ function BrowsePage() {
 
     if (search.trim()) {
       const q = search.trim().toLowerCase();
-      list = list.filter((spell) =>
-        spell.name.toLowerCase().includes(q)
-      );
+      list = list.filter((spell) => spell.name.toLowerCase().includes(q));
     }
 
     if (levelFilter !== "all") {
@@ -98,14 +89,13 @@ function BrowsePage() {
 
     if (schoolFilter !== "all") {
       list = list.filter(
-        (spell) =>
-          spell.school && spell.school.index === schoolFilter
+        (spell) => spell.school && spell.school.index === schoolFilter,
       );
     }
 
     if (classFilter !== "all") {
       list = list.filter((spell) =>
-        spell.classes?.some((c) => c.index === classFilter)
+        spell.classes?.some((c) => c.index === classFilter),
       );
     }
 
@@ -129,9 +119,7 @@ function BrowsePage() {
   const schoolOptions = useMemo(() => {
     const unique = new Map();
     enrichedSpells.forEach((spell) => {
-      if (spell.school) {
-        unique.set(spell.school.index, spell.school.name);
-      }
+      if (spell.school) unique.set(spell.school.index, spell.school.name);
     });
     return [
       { value: "all", label: "All Schools" },
@@ -159,23 +147,25 @@ function BrowsePage() {
   }, [enrichedSpells]);
 
   return (
-    <div className="page page-browse">
+    <div className="page-browse">
       <aside className="sidebar-filters" aria-label="Spell filters">
         <h2 className="page-title">Spell Index</h2>
 
-        <label className="filter-field">
-          <span>Search</span>
+        <label className="field">
+          <span className="field-label">Search</span>
           <input
             type="text"
+            className="input"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name..."
           />
         </label>
 
-        <label className="filter-field">
-          <span>Level</span>
+        <label className="field">
+          <span className="field-label">Level</span>
           <select
+            className="input input-select"
             value={levelFilter}
             onChange={(e) => setLevelFilter(e.target.value)}
           >
@@ -187,9 +177,10 @@ function BrowsePage() {
           </select>
         </label>
 
-        <label className="filter-field">
-          <span>School</span>
+        <label className="field">
+          <span className="field-label">School</span>
           <select
+            className="input input-select"
             value={schoolFilter}
             onChange={(e) => setSchoolFilter(e.target.value)}
           >
@@ -201,9 +192,10 @@ function BrowsePage() {
           </select>
         </label>
 
-        <label className="filter-field">
-          <span>Class</span>
+        <label className="field">
+          <span className="field-label">Class</span>
           <select
+            className="input input-select"
             value={classFilter}
             onChange={(e) => setClassFilter(e.target.value)}
           >
@@ -217,11 +209,15 @@ function BrowsePage() {
       </aside>
 
       <section className="spell-grid-section">
-        {loading && <p>Consulting the Weave...</p>}
-        {!loading && error && <p className="error-text">{error}</p>}
+        {loading && (
+          <p className="status status-loading">Consulting the Weave...</p>
+        )}
+        {!loading && error && (
+          <p className="status status-error">{error}</p>
+        )}
         {!loading && !error && (
           <>
-            <p className="results-count">
+            <p className="field-label" style={{ marginBottom: "1rem" }}>
               Showing {filteredSpells.length} of {enrichedSpells.length} spells
             </p>
             <div
@@ -229,16 +225,21 @@ function BrowsePage() {
               role="list"
               aria-label="Spell search results"
             >
-              {filteredSpells.map((spell) => (
-                <SpellCard
-                  key={spell.index}
-                  spell={spell}
-                  onPrepare={addSpell}
-                  isPrepared={preparedSpells.some(
-                    (s) => s.index === spell.index
-                  )}
-                />
-              ))}
+              {filteredSpells.map((spell) => {
+                const isPrepared = preparedSpells.some(
+                  (s) => s.index === spell.index,
+                );
+
+                return (
+                  <SpellCard
+                    key={spell.index}
+                    spell={spell}
+                    actionLabel={isPrepared ? "Prepared" : "Prepare Spell"}
+                    onAction={addSpell}
+                    disabled={isPrepared}
+                  />
+                );
+              })}
             </div>
           </>
         )}
