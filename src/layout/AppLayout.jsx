@@ -61,6 +61,7 @@ function AppLayout() {
             </NavLink>
           </nav>
 
+          {/* Theme Toggle will be rendered here */}
           <button
             type="button"
             className="theme-toggle"
@@ -78,8 +79,10 @@ function AppLayout() {
           <p className="sidebar-placeholder">Sidebar filters will go here.</p>
         </aside>
 
+        {/* Main content area where routed pages render */}
         <main className="app-main" role="main">
-          <Outlet />
+          <Outlet />{" "}
+          {/* Where the specific page components (BrowsePage, MySpellbookPage) will render */}
         </main>
       </div>
 
