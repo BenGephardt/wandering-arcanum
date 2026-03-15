@@ -1,94 +1,76 @@
-.page-spell-detail {
+.page-detail {
+  background-color: var(--color-bg-elevated);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-soft);
+  padding: 1.2rem 1.3rem 1.4rem;
+}
+
+.detail-header {
+  border-bottom: 2px double var(--color-border-subtle);
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.9rem;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0.25rem;
 }
 
-.spell-detail-header {
-  border-bottom: 1px solid var(--border-strong);
-  padding-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.spell-detail-title {
-  margin: 0;
-  font-family: var(--font-heading);
-}
-
-.spell-detail-meta {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.spell-detail-meta .label {
-  font-weight: 600;
-}
-
-.spell-detail-prepare {
-  align-self: flex-start;
-  margin-top: 8px;
+.detail-sub {
   font-family: var(--font-ui);
-  font-size: 0.9rem;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border-strong);
-  background: var(--bg-card);
-  color: var(--text-main);
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+  margin-bottom: 0.6rem;
 }
 
-.spell-detail-prepare:hover,
-.spell-detail-prepare:focus-visible {
-  background: var(--accent);
-  color: var(--bg-page);
-}
-
-.spell-detail-prepare:active {
-  transform: translateY(1px);
-}
-
-.spell-detail-stats {
+.detail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: 1rem 1.5rem;
+}
+
+.detail-stats {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-.spell-detail-stats div {
-  background: var(--bg-card);
-  border: 1px solid var(--border-strong);
-  border-radius: 6px;
-  padding: 8px;
-}
-
-.spell-detail-stats dt {
+.detail-stat dt {
   font-family: var(--font-ui);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 4px;
-  color: var(--text-muted);
+  letter-spacing: 0.16em;
+  color: var(--color-ink-muted);
 }
 
-.spell-detail-stats dd {
-  margin: 0;
+.detail-stat dd {
+  margin: 0.05rem 0 0.3rem;
   font-size: 0.9rem;
 }
 
-.spell-detail-description h3 {
-  margin-top: 0;
+.section-title {
   font-family: var(--font-heading);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 0.4rem;
 }
 
-.spell-detail-description p {
-  margin-top: 0;
-  margin-bottom: 8px;
+.section-subtitle {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  margin: 0.8rem 0 0.2rem;
 }
 
-.error-text {
-  color: #b00020;
+.detail-description p {
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
