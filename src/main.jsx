@@ -6,6 +6,7 @@ import { ThemeProvider } from "./theme/ThemeProvider.jsx";
 import { PreparedSpellsProvider } from "./spellbook/PreparedSpellsProvider.jsx";
 import { BrowserRouter } from "react-router-dom";
 
+// The main entry point of the application.
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
