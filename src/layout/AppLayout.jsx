@@ -32,6 +32,7 @@ function AppLayout() {
   const { buttonText, nextLabel } = THEME_UI_CONFIG[theme];
   const preparedCount = preparedSpells.length;
 
+  // Render the layout with header, main content area, and footer.
   return (
     <div className="app-root layout">
       <header className="app-header" role="banner">
@@ -48,6 +49,7 @@ function AppLayout() {
             </Link>
           </div>
 
+          {/* Main navigation with active link styling and theme toggle button. */}
           <nav className="main-nav" aria-label="Main navigation">
             <NavLink
               to="/"
