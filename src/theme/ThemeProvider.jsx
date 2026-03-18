@@ -1,50 +1,51 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { ThemeContext } from "./ThemeContext.js";
 import { THEME_MODES, THEME_STORAGE_KEY } from "./themeConstants.js";
 
-// Retrieves the initial theme from localStorage or defaults to LIGHT if not set or on error.
+// Validates and retrieves the theme from storage.
 function getInitialTheme() {
-  if (typeof window === "undefined") {
-    return THEME_MODES.LIGHT;
-  }
+  // Server-side rendering guard
+  if (typeof window === "undefined") return THEME_MODES.LIGHT;
 
+  // Attempt to load the theme from localStorage, with validation and error handling.
   try {
     const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
-    if (
-      stored === THEME_MODES.LIGHT ||
-      stored === THEME_MODES.DARK ||
-      stored === THEME_MODES.DARKVISION
-    ) {
-      return stored;
-    }
+    const validThemes = Object.values(THEME_MODES);
+    return validThemes.includes(stored) ? stored : THEME_MODES.LIGHT;
   } catch {
-    // ignore localStorage errors
+    return THEME_MODES.LIGHT;
   }
-
-  return THEME_MODES.LIGHT;
 }
 
-// ThemeProvider manages the application's theme state and provides it to child components via context.
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(getInitialTheme);
 
+  // Synchronize state with the DOM and LocalStorage
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+
+    // Attempt to save the theme to localStorage, with error handling for quota issues or private browsing.
     try {
       window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch {
-      // ignore localStorage errors
+    } catch (error) {
+      console.warn(
+        "Wandering Arcanum: Theme could not be saved to the Weave.",
+        error,
+      );
     }
   }, [theme]);
 
+  // Declarative cycling logic
   const cycleTheme = useCallback(() => {
-    setTheme((current) => {
-      if (current === THEME_MODES.LIGHT) return THEME_MODES.DARK;
-      if (current === THEME_MODES.DARK) return THEME_MODES.DARKVISION;
-      return THEME_MODES.LIGHT;
-    });
+    const NEXT_THEME = {
+      [THEME_MODES.LIGHT]: THEME_MODES.DARK,
+      [THEME_MODES.DARK]: THEME_MODES.DARKVISION,
+      [THEME_MODES.DARKVISION]: THEME_MODES.LIGHT,
+    };
+    setTheme((current) => NEXT_THEME[current] || THEME_MODES.LIGHT);
   }, []);
 
+  // Memoize the context value to prevent unnecessary re-renders in consumers.
   const value = useMemo(
     () => ({
       theme,
