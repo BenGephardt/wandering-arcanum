@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { usePreparedSpells } from "../spellbook/usePreparedSpells.js";
 import SpellCard from "../components/SpellCard.jsx";
 import "./BrowsePage.css";
@@ -30,6 +30,7 @@ function BrowsePage() {
   // --- GLOBAL STATE ---
   // Custom hook to manage persistent spellbook additions
   const { preparedSpells, addSpell } = usePreparedSpells();
+  const scrollPositionRef = useRef(0);
 
   // Fetch the lightweight master roster exactly once.
   useEffect(() => {
@@ -215,8 +216,25 @@ function BrowsePage() {
 
   // Increases the visible count to load more spells when the "Load More" button is clicked.
   const handleLoadMore = () => {
+    // Save current position to our "bookmark"
+    scrollPositionRef.current = window.scrollY;
+
+    // Trigger the fetch
     setVisibleCount((prev) => prev + 20);
   };
+
+  useEffect(() => {
+    // Only scroll if we have a saved position (prevents jump on first load)
+    if (scrollPositionRef.current > 0 && !loading) {
+      window.scrollTo({
+        top: scrollPositionRef.current,
+        behavior: "instant", // "instant" is often better for preventing the "flash" of jumping
+      });
+
+      // Optional: Reset bookmark after using it
+      // scrollPositionRef.current = 0;
+    }
+  }, [displayedSpells, loading]);
 
   // Renders the browse page with a sidebar for filters and a main section for displaying spells.
   return (
@@ -284,12 +302,13 @@ function BrowsePage() {
 
       {/* --- SPELL GRID & STATES --- */}
       <section className="spell-grid-section">
-        {loading && (
+        {loading && displayedSpells.length === 0 && (
           <p className="status status-loading">Consulting the Weave...</p>
         )}
+
         {!loading && error && <p className="status status-error">{error}</p>}
 
-        {!loading && !error && (
+        {!error && displayedSpells.length > 0 && (
           <>
             {filteredSpells.length === 0 ? (
               <div className="empty-state-container">
@@ -335,15 +354,9 @@ function BrowsePage() {
                   schoolFilter === "all" &&
                   classFilter === "all" &&
                   visibleCount < masterRoster.length && (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginTop: "2rem",
-                      }}
-                    >
+                    <div className="load-more-container">
                       <button
-                        className="btn"
+                        className="btn btn-load-more"
                         onClick={handleLoadMore}
                         disabled={loading}
                       >
