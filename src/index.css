@@ -149,18 +149,21 @@ body {
 }
 
 /* --- Global App Background --- */
-#root, .app-root {
+#root,
+.app-root {
   min-height: 100vh;
   background: transparent;
   position: relative;
   z-index: 1;
 }
 
-:root[data-theme="dark"] #root, :root[data-theme="dark"] .app-root {
+:root[data-theme="dark"] #root,
+:root[data-theme="dark"] .app-root {
   background-blend-mode: overlay, normal, normal, normal;
 }
 
-:root[data-theme="darkvision"] #root, :root[data-theme="darkvision"] .app-root {
+:root[data-theme="darkvision"] #root,
+:root[data-theme="darkvision"] .app-root {
   filter: grayscale(100%) contrast(1.1);
   background-blend-mode: overlay, normal, normal, normal;
 }

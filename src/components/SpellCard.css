@@ -113,7 +113,6 @@
     inset 0 0 20px rgba(179, 77, 46, 0.15);
 }
 
-
 /* --- INTERACTION & ACCESSIBILITY --- */
 .spell-title-link:focus-visible,
 .spell-card-actions button:focus-visible {

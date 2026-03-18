@@ -19,7 +19,7 @@
   top: 5rem;
   contain: layout;
   z-index: 10;
-  height: fit-content; 
+  height: fit-content;
   align-self: start;
 }
 
@@ -97,7 +97,7 @@
   .page-browse {
     grid-template-columns: 1fr;
   }
-  
+
   .sidebar-filters {
     position: static;
     margin-bottom: 1.5rem;
