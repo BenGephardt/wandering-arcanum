@@ -2,23 +2,31 @@
 
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
-![Lighthouse](https://img.shields.io/badge/lighthouse-100-brightgreen?style=for-the-badge&logo=lighthouse)
 
 > **[🚀 View the Live Application](https://bengephardt.github.io/wandering-arcanum/)**
 >
 > _A high-performance, PWA-enabled 5e spell management tool built with React 18._
 
-![Wandering Arcanum Banner](https://via.placeholder.com/800x400?text=Wandering+Arcanum+Screenshot)
+<p align="center">
+  <img src="./assets/wandering-arcanum-banner.png" alt="Wandering Arcanum Banner" width="100%"/>
+</p>
 
-## Project Description
+## 📜 Project Description
 
 Wandering Arcanum is a highly optimized, React-based 5th Edition spell browser and management tool. Designed for players and Dungeon Masters alike, this application allows users to effortlessly explore, filter, and 'prepare' spells, creating a personalized digital spellbook that persists across sessions.
 
 Built with a focus on exceptional performance and user experience, it features a unique "Arcane Grimoire" design system. The UI embraces a "paper and ink" aesthetic with thematic typography, flawless geometric card borders, and color-coded spell classifications, ensuring an immersive and highly accessible interface.
 
-## Key Features & Architecture
+<p align="center">
+  <img src="./assets/app-preview.png" alt="Wandering Arcanum Preview" width="90%" />
+</p>
 
-### ⚡ Performance & Data Fetching (100/100 Lighthouse Score)
+## ⚙️ Key Features & Architecture
+
+<details>
+  <summary><b>🛠 View Technical Architecture & Key Features</b></summary>
+
+### ⚡ Performance & Data Fetching
 
 - **Parallel API Resolution:** Uses a custom Intersection Strategy (`Promise.all`) to fetch and cross-reference multiple 5e API endpoints simultaneously, preventing massive data downloads and keeping the DOM lean.
 - **Debounced Search:** Implements a 400ms debounce on the search input to protect the API from rate limits (`429 Too Many Requests`) during rapid user typing.
@@ -46,9 +54,12 @@ Built with a focus on exceptional performance and user experience, it features a
 - **Design Token System:** Built on a centralized CSS Variable architecture, allowing for instant global theme shifts and easy scaling of the design system.
 - **Mathematical CSS Geometry:** Spell cards utilize precise `calc()` functions to ensure inner and outer border radii remain perfectly parallel regardless of dynamic sizing or prepared state changes.
 
-## 🛠 The Developer's Perspective
+</details>
 
-Building Wandering Arcanum presented several unique architectural challenges that required moving beyond standard "fetch and render" patterns.
+## 👁️ The Developer's Perspective
+
+<details>
+  <summary><b>🔮 Deep Dive: Solving Architectural Challenges</b></summary>
 
 ### 1. Overcoming API Limitations (The Intersection Strategy)
 
@@ -67,7 +78,9 @@ To prevent the app from triggering dozens of unnecessary API calls during rapid 
 
 Achieving the "Arcane Grimoire" aesthetic required a complex double-border system. Standard CSS borders often "pinch" at the corners when nested. I solved this by using `calc()` functions to dynamically adjust the `border-radius` of the inner elements based on the outer radius and the specific inset distance, maintaining perfect geometric parallelism across all 21 cards in the grid.
 
-## Modern Tech Stack
+</details>
+
+## 📦 Modern Tech Stack
 
 - ⚛️ **React 18:** Functional components utilizing Hooks (`useState`, `useEffect`, `useMemo`, `useRef`) and custom hooks for global state.
 - ⚡ **Vite:** Next-generation frontend tooling for highly optimized production builds.
@@ -76,7 +89,7 @@ Achieving the "Arcane Grimoire" aesthetic required a complex double-border syste
 - 🐉 **5e API:** Dynamic data fetching from the [5e-SRD](https://www.dnd5eapi.co/).
 - 🎨 **CSS3:** Custom properties (variables), Grid, Flexbox, and complex `calc()` geometry for a responsive, heavily themed UI.
 
-## Installation & Setup
+## 🗝️ Installation & Setup
 
 ### Using GitHub Codespaces
 
@@ -110,17 +123,17 @@ Achieving the "Arcane Grimoire" aesthetic required a complex double-border syste
    npm run preview
    ```
 
-## Acknowledgements
+## 🖋️ Acknowledgements
 
 - Data provided by the fantastic [D&D 5e API](https://www.dnd5eapi.co/).
 - UI/UX built with best practices from [Codecademy](https://www.codecademy.com/) and [Launch School](https://launchschool.com).
 - Fonts provided by [Google Fonts](https://fonts.google.com/) (Cinzel, Crimson Text, Lato).
 
-## Legal Attribution
+## ⚖️ Legal Attribution
 
 This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of the Coast LLC and available at [https://dnd.wizards.com/resources/systems-reference-document](https://dnd.wizards.com/resources/systems-reference-document). The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at [https://creativecommons.org/licenses/by/4.0/legalcode](https://creativecommons.org/licenses/by/4.0/legalcode).
 
-## ⚖️ License
+## 📄 License
 
 This project is distributed under the **GNU General Public License v3.0 (GPLv3)**. See `LICENSE` for more information.
 
