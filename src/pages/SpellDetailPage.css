@@ -1,6 +1,11 @@
-/* --- DETAIL PAGE STYLES --- */
+/* --- DETAIL PAGE CONTAINER --- */
 .page-detail {
+  /* 1. Layout & Positioning */
   position: relative;
+  padding: 1.5rem;
+  overflow: hidden;
+
+  /* 2. Surface & Visuals */
   background-color: var(--color-bg-elevated);
   background-image:
     var(--texture-paper),
@@ -10,18 +15,14 @@
       rgba(106, 87, 64, 0.12) 100%
     );
   background-blend-mode: multiply, normal;
-
-  border-radius: var(--radius-card);
   border: 2px solid var(--color-border-subtle);
+  border-radius: var(--radius-card);
   box-shadow:
     var(--shadow-soft),
     inset 0 0 40px rgba(0, 0, 0, 0.05);
-
-  padding: 1.5rem;
-  overflow: hidden;
 }
 
-/* --- DARK & DARKVISION ADJUSTMENTS --- */
+/* Detail Page Theme Variants */
 :root[data-theme="dark"] .page-detail,
 :root[data-theme="darkvision"] .page-detail {
   background-image:
@@ -32,24 +33,25 @@
 
 /* --- DETAIL HEADER --- */
 .detail-header {
-  border-bottom: 2px double var(--color-border-subtle);
-  padding-bottom: 0.8rem;
-  margin-bottom: 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px double var(--color-border-subtle);
 }
 
 .detail-sub {
+  color: var(--color-ink-muted);
   font-family: var(--font-ui);
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-ink-muted);
 }
 
-/* --- GRID LAYOUT --- */
+/* --- GRID LAYOUT & STATS --- */
 .detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
@@ -57,18 +59,18 @@
 }
 
 .detail-stats {
-  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+  margin: 0;
 }
 
 .detail-stat dt {
+  color: var(--color-ink-muted);
   font-family: var(--font-ui);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  color: var(--color-ink-muted);
 }
 
 .detail-stat dd {
@@ -79,21 +81,21 @@
 
 /* --- TYPOGRAPHY & BLOCKS --- */
 .section-title {
+  color: var(--color-ink);
   font-family: var(--font-heading);
   font-size: 1.1rem;
-  letter-spacing: 0.08em;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
   margin: 0 0 0.6rem;
-  color: var(--color-ink);
 }
 
 .section-subtitle {
+  color: var(--color-ink-muted);
   font-family: var(--font-ui);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   margin: 1.2rem 0 0.4rem;
-  color: var(--color-ink-muted);
 }
 
 .detail-description p {
@@ -103,14 +105,15 @@
 
 /* --- ACTIONS --- */
 .detail-actions {
+  display: flex;
+  justify-content: flex-end;
+
   margin-top: 2rem;
   padding-top: 1rem;
   border-top: 1px solid var(--color-border-subtle);
-  display: flex;
-  justify-content: flex-end;
 }
 
-/* --- RESPONSIVE --- */
+/* --- RESPONSIVE ADJUSTMENTS --- */
 @media (max-width: 768px) {
   .detail-grid {
     grid-template-columns: minmax(0, 1fr);

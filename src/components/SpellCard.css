@@ -1,10 +1,17 @@
+/* --- SPELL CARD BASE STYLE --- */
 .spell-card {
+  /* 1. Variables First */
   --spell-card-vignette-color: rgba(106, 87, 64, 0.12);
   --spell-card-vignette-stop: 30%;
   --spell-card-vignette-blend: multiply;
   --spell-card-inner-inset: 6px;
 
+  /* 2. Layout & Positioning */
   position: relative;
+  padding: 0;
+  overflow: hidden;
+
+  /* 3. Surface & Visuals */
   background-color: var(--color-bg-elevated);
   background-image:
     var(--texture-paper),
@@ -14,17 +21,13 @@
       var(--spell-card-vignette-color) 100%
     );
   background-blend-mode: var(--spell-card-vignette-blend), normal;
-
-  /* Straightened and uniform */
   border-radius: var(--radius-card, 12px);
   border: 2px solid var(--color-border-card);
   box-shadow:
     var(--shadow-soft),
     inset 0 0 20px rgba(142, 142, 142, 0.05);
-  padding: 0;
-  overflow: hidden;
 
-  /* Removed the rotation, kept translateZ for performance */
+  /* 4. Performance & Animations */
   transform: translateZ(0);
   transition:
     transform var(--transition-fast),
@@ -40,14 +43,17 @@
   --spell-card-vignette-blend: overlay;
 }
 
-/* --- CARD CONTENT --- */
+/* --- CARD DECORATION & CONTENT --- */
 .spell-card::before {
+  /* Positioning & Content */
   content: "";
   position: absolute;
   inset: 6px;
-  border-radius: calc(var(--radius-card, 12px) - 8px);
-  border: 1px solid rgba(255, 255, 255, 0.45);
   pointer-events: none;
+
+  /* Visual Geometry */
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: calc(var(--radius-card, 12px) - 8px);
 }
 
 .spell-card-inner {
@@ -56,6 +62,7 @@
   transform: translateZ(0);
 }
 
+/* --- TYPOGRAPHY --- */
 .spell-title {
   font-family: var(--font-heading);
   font-size: 1rem;
@@ -64,9 +71,10 @@
 }
 
 .spell-title-link {
-  text-decoration: none;
-  color: var(--color-ink);
   display: inline-block;
+  color: var(--color-ink);
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .spell-title-link:hover {
@@ -75,9 +83,9 @@
 
 /* --- METADATA & ACTIONS --- */
 .spell-meta {
-  margin: 0 0 0.6rem;
   display: grid;
   gap: 0.25rem;
+  margin: 0 0 0.6rem;
 }
 
 .spell-meta-row {
@@ -88,11 +96,11 @@
 }
 
 .spell-meta-row dt {
+  color: var(--color-ink-muted);
   font-family: var(--font-ui);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--color-ink-muted);
 }
 
 .spell-meta-row dd {
@@ -105,6 +113,7 @@
   justify-content: flex-end;
 }
 
+/* --- STATES & ACCESSIBILITY --- */
 .spell-card-prepared {
   border-color: var(--color-accent);
   box-shadow:
@@ -113,13 +122,8 @@
     inset 0 0 20px rgba(179, 77, 46, 0.15);
 }
 
-/* --- INTERACTION & ACCESSIBILITY --- */
 .spell-title-link:focus-visible,
 .spell-card-actions button:focus-visible {
   outline: 3px solid var(--color-accent);
   outline-offset: 2px;
-}
-
-.spell-title-link {
-  cursor: pointer;
 }

@@ -3,6 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   margin-bottom: 0.85rem;
 }
 
@@ -17,6 +18,7 @@
 /* --- STATUS & EMPTY STATES --- */
 .empty-state {
   margin-top: 0.25rem;
-  font-family: var(--font-ui);
+
   color: var(--color-ink-muted);
+  font-family: var(--font-ui);
 }

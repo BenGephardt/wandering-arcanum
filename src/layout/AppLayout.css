@@ -1,18 +1,19 @@
 /* --- LAYOUT & STRUCTURE --- */
 .layout {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
+
 .layout-main {
   flex: 1;
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding: 1.5rem 1.25rem 2.5rem;
-  width: 100%;
 }
 
-/* --- HEADER & NAVIGATION --- */
+/* --- HEADER & BRANDING --- */
 .app-header {
   position: sticky;
   top: 0;
@@ -26,6 +27,7 @@
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
+/* Header Theme Variants */
 :root[data-theme="dark"] .app-header {
   background: linear-gradient(
     to bottom,
@@ -33,6 +35,7 @@
     rgba(26, 18, 13, 0.84)
   );
 }
+
 :root[data-theme="darkvision"] .app-header {
   background: linear-gradient(
     to bottom,
@@ -42,12 +45,12 @@
 }
 
 .header-inner {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 0.75rem 1.25rem;
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
 }
 
 .brand {
@@ -55,12 +58,12 @@
 }
 
 .brand-mark {
-  text-decoration: none;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  transition: transform var(--transition-fast);
   width: fit-content;
+  text-decoration: none;
+  transition: transform var(--transition-fast);
 }
 
 .brand-mark:hover {
@@ -68,33 +71,33 @@
 }
 
 .brand-main {
+  color: var(--color-ink);
   font-family: var(--font-heading);
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--color-ink);
   line-height: 1.1;
   letter-spacing: 0.03em;
 }
 
-.text-accent {
-  color: var(--color-accent);
-}
-
 .brand-sub {
+  display: flex;
+  align-items: center;
+  color: var(--color-ink-muted);
   font-family: var(--font-ui);
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: var(--color-ink-muted);
-  display: flex;
-  align-items: center;
 }
 
 .brand-divider {
+  margin: 0 6px;
   color: var(--color-border-subtle);
   font-size: 0.8rem;
-  margin: 0 6px;
+}
+
+.text-accent {
+  color: var(--color-accent);
 }
 
 /* --- NAVIGATION --- */
@@ -106,11 +109,12 @@
 
 .nav-link {
   position: relative;
+  display: inline-block;
+  padding: 0.35rem 0.7rem;
+  color: var(--color-ink);
   font-family: var(--font-ui);
   font-size: 0.9rem;
   text-decoration: none;
-  color: var(--color-ink);
-  padding: 0.35rem 0.7rem;
   border-radius: 999px;
   border: 1px solid transparent;
   transition:
@@ -120,32 +124,32 @@
     transform var(--transition-fast);
 }
 
-.nav-link:hover {
-  border-color: var(--color-border-subtle);
+.nav-link:hover,
+.nav-link:focus-visible {
   background-color: rgba(0, 0, 0, 0.03);
+  border-color: var(--color-border-subtle);
 }
 
 .nav-link:focus-visible {
-  border-color: var(--color-border-subtle);
-  background-color: rgba(0, 0, 0, 0.03);
   outline: 2px solid var(--color-border-strong);
   outline-offset: 2px;
 }
 
 .nav-link-active {
-  border-color: var(--color-border-strong);
   background-color: rgba(0, 0, 0, 0.05);
+  border-color: var(--color-border-strong);
 }
 
-/* --- THEME TOGGLE --- */
+/* --- UI ELEMENTS --- */
 .pill-count {
+  display: inline-block;
+  min-width: 1.35rem;
   margin-left: 0.45rem;
   padding: 0 0.4rem;
-  min-width: 1.35rem;
   text-align: center;
+  font-size: 0.73rem;
   border-radius: 999px;
   border: 1px solid var(--color-border-strong);
-  font-size: 0.73rem;
 }
 
 .theme-toggle {
@@ -157,12 +161,12 @@
   max-width: 1080px;
   margin: 0 auto;
   padding: 0.75rem 1.25rem 1.75rem;
+  color: var(--color-ink-muted);
   font-family: var(--font-ui);
   font-size: 0.75rem;
-  color: var(--color-ink-muted);
 }
 
-/* --- RESPONSIVE ADJUSTMENTS --- */
+/* --- MEDIA QUERIES --- */
 @media (max-width: 768px) {
   .header-inner {
     flex-wrap: wrap;
@@ -171,11 +175,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-mark {
-    transition: none;
-  }
-
+  .brand-mark,
   .brand-mark:hover {
+    transition: none;
     transform: none;
   }
 }

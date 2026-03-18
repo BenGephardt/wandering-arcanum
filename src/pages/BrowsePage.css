@@ -2,40 +2,43 @@
 .page-browse {
   display: grid;
   grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr;
   gap: 1.5rem;
   align-items: start;
   min-height: 100vh;
-  grid-template-rows: auto 1fr;
-}
-
-/* --- SIDEBAR & FILTERS --- */
-.sidebar-filters {
-  background-color: var(--color-bg-elevated);
-  border-radius: var(--radius-card);
-  border: 2px solid var(--color-border-subtle);
-  box-shadow: var(--shadow-soft);
-  padding: 1.25rem;
-  position: sticky;
-  top: 5rem;
-  contain: layout;
-  z-index: 10;
-  height: fit-content;
-  align-self: start;
 }
 
 .page-title {
   margin-top: 0;
   margin-bottom: 1.5rem;
-  font-family: var(--font-heading);
   color: var(--color-primary);
+  font-family: var(--font-heading);
   font-size: 1.4rem;
+}
+
+/* --- SIDEBAR & FILTERS --- */
+.sidebar-filters {
+  position: sticky;
+  top: 5rem;
+  z-index: 10;
+  align-self: start;
+
+  height: fit-content;
+  padding: 1.25rem;
+
+  background-color: var(--color-bg-elevated);
+  border: 2px solid var(--color-border-subtle);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+
+  contain: layout;
 }
 
 /* --- SPELL GRID SECTION --- */
 .spell-grid-section {
-  min-height: 80vh;
   display: flex;
   flex-direction: column;
+  min-height: 80vh;
 }
 
 .spell-grid {
@@ -49,26 +52,36 @@
 .load-more-container {
   display: flex;
   justify-content: center;
-  padding: 4rem 0;
+
   margin-top: 2rem;
+  padding: 4rem 0;
   border-top: 1px solid var(--color-border-subtle);
 }
 
 .btn-load-more {
+  /* Layout & Sizing */
+  display: inline-block;
+  padding: 0.85rem 2.2rem;
+  cursor: pointer;
+
+  /* Visuals */
   background-color: var(--color-bg-card, #1a1a1a);
   color: var(--color-text-main, #eee);
   border: 2px solid var(--color-school-evocation, #882222);
-  padding: 0.85rem 2.2rem;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+
+  /* Typography */
   font-family: var(--font-ui);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  cursor: pointer;
-  border-radius: 4px;
+
+  /* Interaction */
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
+/* Button States */
 .btn-load-more:hover:not(:disabled) {
   background-color: var(--color-school-evocation, #882222);
   color: white;

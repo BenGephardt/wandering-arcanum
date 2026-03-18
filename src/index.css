@@ -1,4 +1,4 @@
-/* --- CSS Reset & Base --- */
+/* --- 1. GLOBAL RESET & BASE --- */
 *,
 *::before,
 *::after {
@@ -13,11 +13,12 @@ body {
 }
 
 body {
-  font-family: var(--font-body);
-  background-color: var(--color-bg);
-  color: var(--color-ink);
-  -webkit-font-smoothing: antialiased;
+  /* Layout & Sizing */
+  background-attachment: fixed;
+  background-size: 100vw 100vh;
 
+  /* Surface & Visuals */
+  background-color: var(--color-bg);
   background-image:
     var(--texture-paper),
     radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.2), transparent 50%),
@@ -29,37 +30,37 @@ body {
       transparent 1px,
       transparent 3px
     );
-
-  background-attachment: fixed;
-  background-size: 100vw 100vh;
   background-blend-mode: multiply, normal, normal, normal;
+
+  /* Typography & Rendering */
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
 
-:root[data-theme="dark"] body {
-  background-blend-mode: overlay, normal, normal, normal;
-}
-
+/* Theme-specific Body Blending */
+:root[data-theme="dark"] body,
 :root[data-theme="darkvision"] body {
   background-blend-mode: overlay, normal, normal, normal;
 }
 
-/* --- Design Tokens --- */
+/* --- 2. DESIGN TOKENS (:root) --- */
 :root {
-  /* Color tokens */
+  /* Color Palette: Core */
   --color-bg: #f9f7f1;
   --color-bg-elevated: #f4f0e5;
   --color-ink: #2c2c2c;
   --color-ink-muted: #4c4337;
-
-  /* Dynamic input background */
   --color-bg-input: rgba(255, 255, 255, 0.85);
 
+  /* Color Palette: Borders & Accents */
   --color-border-subtle: #cbbda2;
   --color-border-strong: #6a5740;
+  --color-border-card: #9a8560;
   --color-accent: #b34d2e;
   --color-accent-soft: #e0b38a;
 
-  /* Spell school border colors */
+  /* Color Palette: Spell Schools */
   --color-school-abjuration: #2d6a8a;
   --color-school-conjuration: #4f7c4f;
   --color-school-divination: #7c5ca3;
@@ -69,75 +70,51 @@ body {
   --color-school-necromancy: #5c3b7a;
   --color-school-transmutation: #a37b3b;
 
-  --color-border-card: #9a8560;
+  /* Status Colors */
   --color-status-error: #7c1f26;
   --color-status-loading: #3b4a63;
 
-  /* Theme variants */
-  --theme-light-bg: #f9f7f1;
-  --theme-light-bg-elevated: #f4f0e5;
-  --theme-light-ink: #2c2c2c;
-
-  --theme-dark-bg: #1a120d;
-  --theme-dark-bg-elevated: #261710;
-  --theme-dark-ink: #f5efe1;
-
-  --theme-darkvision-bg: #050505;
-  --theme-darkvision-bg-elevated: #121212;
-  --theme-darkvision-ink: #e0e0e0;
-
-  /* Typography */
+  /* Typography Tokens */
   --font-heading: "Cinzel", "Times New Roman", serif;
   --font-body: "Crimson Text", Georgia, serif;
-  --font-ui:
-    "Lato", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-ui: "Lato", system-ui, -apple-system, sans-serif;
 
-  /* Sizing and layout */
+  /* Elevation & Animation */
   --radius-card: 12px;
   --shadow-soft: 0 16px 30px rgba(0, 0, 0, 0.12);
   --transition-fast: 0.18s ease-out;
 
-  /* Texture: paper grain */
+  /* Textures */
   --texture-paper: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)' opacity='0.08'/%3E%3C/svg%3E");
+
+  /* Internal Theme Constants (For reference) */
+  --theme-light-bg: #f9f7f1;
+  --theme-dark-bg: #1a120d;
+  --theme-dark-ink: #f5efe1;
+  --theme-darkvision-bg: #050505;
 }
 
-/* --- Theme Modes --- */
-
-/* Daylight (Original Light) */
-:root[data-theme="light"] {
-  --color-bg: var(--theme-light-bg);
-  --color-bg-elevated: var(--theme-light-bg-elevated);
-  --color-ink: var(--theme-light-ink);
-}
-
-/* Torchlight (Original Dark) */
+/* --- 3. THEME MODE OVERRIDES --- */
 :root[data-theme="dark"] {
   --color-bg: var(--theme-dark-bg);
-  --color-bg-elevated: var(--theme-dark-bg-elevated);
+  --color-bg-elevated: #261710;
   --color-ink: var(--theme-dark-ink);
-
-  /* High contrast muted text and deep inputs for readability */
   --color-ink-muted: #b5a898;
   --color-bg-input: rgba(0, 0, 0, 0.45);
-
   --color-border-subtle: #4c3a2c;
   --color-border-strong: #f0e0c7;
 }
 
-/* Darkvision (True Grayscale) */
 :root[data-theme="darkvision"] {
   --color-bg: var(--theme-darkvision-bg);
-  --color-bg-elevated: var(--theme-darkvision-bg-elevated);
-  --color-ink: var(--theme-darkvision-ink);
-
-  /* High contrast light gray for grayscale mode */
+  --color-bg-elevated: #121212;
+  --color-ink: #e0e0e0;
   --color-ink-muted: #a0a0a0;
   --color-bg-input: rgba(0, 0, 0, 0.6);
-
   --color-border-subtle: #333333;
   --color-border-strong: #ffffff;
 
-  /* Desaturate school colors completely */
+  /* Grayscale School Desaturation */
   --color-school-abjuration: #888;
   --color-school-conjuration: #888;
   --color-school-divination: #888;
@@ -148,51 +125,49 @@ body {
   --color-school-transmutation: #888;
 }
 
-/* --- Global App Background --- */
+/* --- 4. APP ROOT & WRAPPERS --- */
 #root,
 .app-root {
-  min-height: 100vh;
-  background: transparent;
   position: relative;
   z-index: 1;
-}
-
-:root[data-theme="dark"] #root,
-:root[data-theme="dark"] .app-root {
-  background-blend-mode: overlay, normal, normal, normal;
+  min-height: 100vh;
+  background: transparent;
 }
 
 :root[data-theme="darkvision"] #root,
 :root[data-theme="darkvision"] .app-root {
   filter: grayscale(100%) contrast(1.1);
-  background-blend-mode: overlay, normal, normal, normal;
 }
 
-/* --- Reusable UI Controls --- */
+/* --- 5. REUSABLE UI COMPONENTS --- */
+
+/* Buttons */
 .btn {
-  font-family: var(--font-ui);
-  font-size: 0.86rem;
-  border-radius: 999px;
+  /* Layout */
+  display: inline-block;
   padding: 0.4rem 0.9rem;
-  border: 1px solid transparent;
   cursor: pointer;
+
+  /* Visuals */
   background: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
   color: var(--color-ink);
   text-decoration: none;
 
-  transition:
-    background-color var(--transition-fast),
-    border-color var(--transition-fast),
-    color var(--transition-fast),
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+  /* Typography */
+  font-family: var(--font-ui);
+  font-size: 0.86rem;
+
+  /* Interaction */
+  transition: all var(--transition-fast);
 }
 
 .btn-primary {
   background: linear-gradient(135deg, var(--color-accent) 0%, #7b2e1c 100%);
-  color: #fdf7ed;
   border-color: rgba(0, 0, 0, 0.25);
   box-shadow: 0 7px 14px rgba(0, 0, 0, 0.25);
+  color: #fdf7ed;
 }
 
 .btn-primary:hover,
@@ -208,8 +183,8 @@ body {
 }
 
 .btn-ghost {
-  border-color: var(--color-border-subtle);
   background-color: rgba(0, 0, 0, 0.02);
+  border-color: var(--color-border-subtle);
 }
 
 .btn-ghost:hover,
@@ -217,16 +192,33 @@ body {
   background-color: rgba(0, 0, 0, 0.06);
 }
 
-/* --- Form Controls --- */
-.input {
+/* Form Controls */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.field-label {
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.input {
   width: 100%;
   padding: 0.4rem 0.6rem;
-  border-radius: 7px;
-  border: 1px solid var(--color-border-subtle);
+
   background-color: var(--color-bg-input);
   color: var(--color-ink);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 7px;
+
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+
   transition:
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
@@ -252,37 +244,22 @@ body {
   background-repeat: no-repeat;
 }
 
-/* --- Form Field --- */
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 0.75rem;
-}
-
-.field-label {
-  font-family: var(--font-ui);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-/* --- Global Typography --- */
+/* --- 6. UTILITY UI & MESSAGING --- */
 .page-title {
+  margin: 0 0 0.85rem;
+  color: var(--color-ink);
   font-family: var(--font-heading);
   font-size: 1.4rem;
-  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin: 0 0 0.85rem;
+  letter-spacing: 0.06em;
 }
 
-/* --- Status Messages --- */
 .status {
-  font-family: var(--font-ui);
-  border-radius: 8px;
   padding: 0.8rem 1rem;
   margin-bottom: 1rem;
   border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: var(--font-ui);
 }
 
 .status-loading {
@@ -297,66 +274,40 @@ body {
   color: var(--color-status-error);
 }
 
-/* --- Empty State --- */
+/* Empty States */
 .empty-state-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
+
+  margin-top: 2rem;
   padding: 4rem 2rem;
+
+  text-align: center;
   border: 2px dashed var(--color-border-subtle);
   border-radius: var(--radius-card);
-  margin-top: 2rem;
 }
 
 .empty-state-text {
+  max-width: 450px;
+  margin: 0 0 1.2rem 0;
+
+  color: var(--color-ink-muted);
   font-family: var(--font-body);
   font-size: 1rem;
   font-style: italic;
-  color: var(--color-ink-muted);
-  max-width: 450px;
   line-height: 1.6;
-  margin: 0 0 1.2rem 0;
 }
 
-/* --- Accessibility --- */
+/* Accessibility Global */
 :focus-visible {
   outline: 2px solid var(--color-border-strong);
   outline-offset: 2px;
 }
 
-/* --- Responsive --- */
+/* --- 7. RESPONSIVE ADJUSTMENTS --- */
 @media (max-width: 768px) {
-  .brand-mark {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.25rem;
-  }
-
-  .brand-main {
-    font-size: 1.6rem;
-    display: block;
-    line-height: 1.1;
-  }
-
-  .brand-sub {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-ink-muted);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .brand-divider {
-    font-size: 0.6rem;
-    color: var(--color-accent);
-  }
-
   .header-inner {
     flex-direction: column;
     gap: 1.25rem;
@@ -366,8 +317,32 @@ body {
   .main-nav {
     width: 100%;
     justify-content: center;
-    border-top: 1px solid var(--color-border-subtle);
-    padding-top: 1rem;
     gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .brand-mark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .brand-main {
+    display: block;
+    font-size: 1.6rem;
+    line-height: 1.1;
+  }
+
+  .brand-sub {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-ink-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
   }
 }
