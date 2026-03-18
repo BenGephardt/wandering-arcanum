@@ -50,7 +50,7 @@ const CLASS_OPTIONS = [
 function BrowsePage() {
   const [masterRoster, setMasterRoster] = useState([]);
   const [displayedSpells, setDisplayedSpells] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(20);
+  const [visibleCount, setVisibleCount] = useState(21);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -64,7 +64,7 @@ function BrowsePage() {
 
   // Helper to handle filter resets & pagination snags
   const refreshSearch = () => {
-    setVisibleCount(20);
+    setVisibleCount(21);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -119,6 +119,10 @@ function BrowsePage() {
         if (!cancelled) setMasterRoster(finalRoster);
       } catch {
         console.error("Failed to scribe spell details.");
+
+        if (!cancelled) setError("Failed to fetch spell details.");
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
 
@@ -318,7 +322,7 @@ function BrowsePage() {
                   className="btn btn-load-more"
                   onClick={() => {
                     scrollPositionRef.current = window.scrollY;
-                    setVisibleCount((v) => v + 20);
+                    setVisibleCount((v) => v + 21);
                   }}
                   disabled={loading}
                 >
