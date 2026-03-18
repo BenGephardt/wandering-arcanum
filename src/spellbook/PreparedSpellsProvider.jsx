@@ -7,9 +7,7 @@ function getInitialPreparedSpells() {
   if (typeof window === "undefined") return [];
 
   try {
-    const stored = window.localStorage.getItem(
-      PREPARED_SPELLS_STORAGE_KEY
-    );
+    const stored = window.localStorage.getItem(PREPARED_SPELLS_STORAGE_KEY);
     if (!stored) return [];
     const parsed = JSON.parse(stored);
     if (Array.isArray(parsed)) return parsed;
@@ -21,14 +19,14 @@ function getInitialPreparedSpells() {
 
 export function PreparedSpellsProvider({ children }) {
   const [preparedSpells, setPreparedSpells] = useState(
-    getInitialPreparedSpells
+    getInitialPreparedSpells,
   );
 
   useEffect(() => {
     try {
       window.localStorage.setItem(
         PREPARED_SPELLS_STORAGE_KEY,
-        JSON.stringify(preparedSpells)
+        JSON.stringify(preparedSpells),
       );
     } catch {
       // ignore storage errors
@@ -46,7 +44,7 @@ export function PreparedSpellsProvider({ children }) {
 
   const removeSpell = useCallback((index) => {
     setPreparedSpells((current) =>
-      current.filter((spell) => spell.index !== index)
+      current.filter((spell) => spell.index !== index),
     );
   }, []);
 
@@ -61,7 +59,7 @@ export function PreparedSpellsProvider({ children }) {
       removeSpell,
       clearSpells,
     }),
-    [preparedSpells, addSpell, removeSpell, clearSpells]
+    [preparedSpells, addSpell, removeSpell, clearSpells],
   );
 
   return (

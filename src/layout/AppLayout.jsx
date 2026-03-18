@@ -35,7 +35,8 @@ function AppLayout() {
                 Wandering <span className="text-accent">Arcanum</span>
               </span>
               <span className="brand-sub">
-                A Spellbook and Browser <span className="brand-divider">✦</span> 5e
+                A Spellbook and Browser <span className="brand-divider">✦</span>{" "}
+                5e
               </span>
             </Link>
           </div>

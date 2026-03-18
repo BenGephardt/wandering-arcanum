@@ -24,8 +24,8 @@ function MySpellbookPage() {
         <div className="empty-state-container">
           <p className="empty-state-text">
             Consult the Weave to bind this page with spells. Unless hurling a
-            blank tome is your next plan of action, browse the index and ready your
-            magic.
+            blank tome is your next plan of action, browse the index and ready
+            your magic.
           </p>
           <Link to="/" className="btn btn-ghost">
             Browse the Index

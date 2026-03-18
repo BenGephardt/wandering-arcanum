@@ -29,14 +29,17 @@ function SpellDetailPage() {
         if (!cancelled) setSpell(data);
       } catch (e) {
         console.error(e);
-        if (!cancelled) setError("Unable to load this spell. Please try again.");
+        if (!cancelled)
+          setError("Unable to load this spell. Please try again.");
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
 
     fetchSpell();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [index]);
 
   if (loading) {
