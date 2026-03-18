@@ -1,6 +1,4 @@
 .spell-card {
-  --spell-card-radius: 2% 3% 2% 4% / 3% 2% 4% 2%;
-  --spell-card-rotation: 0deg;
   --spell-card-vignette-color: rgba(106, 87, 64, 0.12);
   --spell-card-vignette-stop: 30%;
   --spell-card-vignette-blend: multiply;
@@ -16,14 +14,18 @@
       var(--spell-card-vignette-color) 100%
     );
   background-blend-mode: var(--spell-card-vignette-blend), normal;
-  border-radius: var(--spell-card-radius);
+
+  /* Straightened and uniform */
+  border-radius: var(--radius-card, 12px);
   border: 2px solid var(--color-border-card);
   box-shadow:
     var(--shadow-soft),
     inset 0 0 20px rgba(142, 142, 142, 0.05);
   padding: 0;
   overflow: hidden;
-  transform: rotate(var(--spell-card-rotation)) translateZ(0);
+
+  /* Removed the rotation, kept translateZ for performance */
+  transform: translateZ(0);
   transition:
     transform var(--transition-fast),
     box-shadow var(--transition-fast);
@@ -38,34 +40,12 @@
   --spell-card-vignette-blend: overlay;
 }
 
-/* --- VARIATIONS --- */
-.spell-card:nth-child(even) {
-  --spell-card-rotation: 0.2deg;
-}
-.spell-card:nth-child(odd) {
-  --spell-card-rotation: -0.2deg;
-}
-.spell-card:nth-child(2n) {
-  --spell-card-radius: 3% 2% 4% 2% / 2% 4% 2% 3%;
-}
-.spell-card:nth-child(3n) {
-  --spell-card-radius: 2% 4% 2% 3% / 4% 2% 3% 2%;
-  --spell-card-rotation: 0.4deg;
-}
-.spell-card:nth-child(5n) {
-  --spell-card-radius: 4% 2% 3% 2% / 2% 3% 2% 4%;
-}
-.spell-card:nth-child(7n) {
-  --spell-card-radius: 3% 4% 2% 2% / 2% 2% 4% 3%;
-  --spell-card-rotation: -0.3deg;
-}
-
 /* --- CARD CONTENT --- */
 .spell-card::before {
   content: "";
   position: absolute;
   inset: 6px;
-  border-radius: inherit;
+  border-radius: calc(var(--radius-card, 12px) - 8px);
   border: 1px solid rgba(255, 255, 255, 0.45);
   pointer-events: none;
 }
@@ -126,8 +106,13 @@
 }
 
 .spell-card-prepared {
-  border-style: double;
+  border-color: var(--color-accent);
+  box-shadow:
+    var(--shadow-soft),
+    0 0 0 1px var(--color-accent),
+    inset 0 0 20px rgba(179, 77, 46, 0.15);
 }
+
 
 /* --- INTERACTION & ACCESSIBILITY --- */
 .spell-title-link:focus-visible,
