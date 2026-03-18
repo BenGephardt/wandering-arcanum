@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import "./SpellCard.css";
 
 // A reusable card component for displaying spell information in a consistent format.
@@ -70,4 +70,4 @@ function SpellCard({ spell, actionLabel, onAction, disabled = false }) {
   );
 }
 
-export default SpellCard;
+export default memo(SpellCard);
