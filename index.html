@@ -5,8 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="preconnect" href="https://www.dnd5eapi.co" crossorigin />
+    <meta name="theme-color" content="#f9f7f1" />
+    <link rel="manifest" href="/manifest.json" />
 
+    <!-- Preconnect to critical resources for improved performance. -->
+    <link rel="preconnect" href="https://www.dnd5eapi.co" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,13 +17,36 @@
       rel="stylesheet"
     />
 
-    <title>Wandering Arcanum – a 5e Spellbook</title>
+    <!-- Open Graph metadata for enhanced sharing on social platforms. -->
+    <title>Wandering Arcanum – A 5e Spellbook</title>
     <meta
       name="description"
-      content="An interactive, accessible 5e spellbook and filtering tool."
+      content="An interactive, accessible 5e spellbook and filtering tool for the modern wizard."
     />
+
+    <!-- Open Graph metadata for enhanced sharing on social platforms. -->
+    <meta property="og:title" content="Wandering Arcanum – A 5e Spellbook" />
+    <meta
+      property="og:description"
+      content="Master the Weave with high-performance spell filtering and a custom digital grimoire."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-image.jpg" />
   </head>
+
+  <!-- Fallback content for users with JavaScript disabled. -->
   <body>
+    <noscript>
+      <div style="text-align: center; padding: 2rem; font-family: serif">
+        <h2>The Weave is Blocked</h2>
+        <p>
+          Wandering Arcanum requires JavaScript to function. Please enable it to
+          cast your spells.
+        </p>
+      </div>
+    </noscript>
+
+    <!-- The root element where the React application will be mounted. -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
