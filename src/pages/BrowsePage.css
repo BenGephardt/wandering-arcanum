@@ -45,26 +45,6 @@
   contain: layout;
 }
 
-/* --- STATUS & EMPTY STATES --- */
-.status {
-  font-family: var(--font-ui);
-  border-radius: 8px;
-  padding: 0.8rem 1rem;
-  margin-bottom: 1rem;
-}
-
-.status-loading {
-  background-color: rgba(59, 74, 99, 0.15);
-  border: 1px solid rgba(59, 74, 99, 0.4);
-  color: var(--color-text-muted);
-}
-
-.status-error {
-  background-color: rgba(124, 31, 38, 0.15);
-  border: 1px solid rgba(124, 31, 38, 0.6);
-  color: #ffaaaa;
-}
-
 /* --- LOAD MORE SECTION --- */
 .load-more-container {
   display: flex;
