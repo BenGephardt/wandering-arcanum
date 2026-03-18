@@ -1,0 +1,39 @@
+/* Styles for the NotFoundPage component. */
+.page-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  height: 100%;
+}
+
+/* --- TYPOGRAPHY --- */
+.not-found-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* A slightly smaller, muted text to provide context for the 404 error. */
+.not-found-text {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+/* --- RETURN BUTTON --- */
+.btn-return {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+/* A simple hover effect to indicate interactivity. */
+.btn-return:hover {
+  opacity: 0.6;
+}
