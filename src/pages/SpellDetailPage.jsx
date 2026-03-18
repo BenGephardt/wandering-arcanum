@@ -1,36 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { usePreparedSpells } from "../spellbook/usePreparedSpells.js";
 import "./SpellDetailPage.css";
 
 const API_BASE = "https://www.dnd5eapi.co";
 
-// Responsible for displaying detailed information about a specific spell.
+// The SpellDetailPage component displays detailed information about a specific spell.
 function SpellDetailPage() {
   const { index } = useParams();
   const [spell, setSpell] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Access prepared spells and actions from context
   const { preparedSpells, addSpell, removeSpell } = usePreparedSpells();
   const isPrepared = preparedSpells.some((s) => s.index === index);
 
+  // Fetch spell details on component mount or when index changes
   useEffect(() => {
     let cancelled = false;
 
+    // Async function to fetch spell details
     async function fetchSpell() {
       setLoading(true);
       setError("");
 
+      // Data Fetching with Error Handling
       try {
         const res = await fetch(`${API_BASE}/api/spells/${index}`);
-        if (!res.ok) throw new Error("Failed to fetch spell details");
+        if (!res.ok) throw new Error();
         const data = await res.json();
         if (!cancelled) setSpell(data);
-      } catch (e) {
-        console.error(e);
+      } catch {
         if (!cancelled)
-          setError("Unable to load this spell. Please try again.");
+          setError(
+            "Unable to load this spell. The Weave is currently blocked.",
+          );
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -42,23 +47,9 @@ function SpellDetailPage() {
     };
   }, [index]);
 
-  if (loading) {
-    return <p className="status status-loading">Consulting the Weave...</p>;
-  }
-
-  if (error) {
-    return <p className="status status-error">{error}</p>;
-  }
-
-  if (!spell) {
-    return <p className="status status-error">Spell not found.</p>;
-  }
-
-  const levelLabel = spell.level === 0 ? "Cantrip" : `Level ${spell.level}`;
-  const schoolName = spell.school?.name || "Unknown";
-  const classNames = spell.classes?.map((c) => c.name).join(", ") || "—";
-
-  const handlePrepareClick = () => {
+  // Stable callback for the prepare toggle
+  const handlePrepareToggle = useCallback(() => {
+    // Toggle Spell Preparation
     if (isPrepared) {
       removeSpell(spell.index);
     } else {
@@ -70,8 +61,20 @@ function SpellDetailPage() {
         classes: spell.classes,
       });
     }
-  };
+  }, [isPrepared, spell, addSpell, removeSpell]);
 
+  // Early Returns for state management
+  if (loading)
+    return <p className="status status-loading">Consulting the Weave...</p>;
+  if (error) return <p className="status status-error">{error}</p>;
+  if (!spell) return <p className="status status-error">Spell not found.</p>;
+
+  // Data Pre-formatting
+  const levelLabel = spell.level === 0 ? "Cantrip" : `Level ${spell.level}`;
+  const schoolName = spell.school?.name || "Unknown";
+  const classNames = spell.classes?.map((c) => c.name).join(", ") || "—";
+
+  // Main Render of Spell Details
   return (
     <article className="page-detail">
       <header className="detail-header">
@@ -82,17 +85,19 @@ function SpellDetailPage() {
           {levelLabel} • {schoolName}
         </p>
 
+        {/* Prepare/Unprepare Button */}
         <div>
           <button
             type="button"
             className={`btn ${isPrepared ? "btn-ghost" : "btn-primary"}`}
-            onClick={handlePrepareClick}
+            onClick={handlePrepareToggle}
           >
             {isPrepared ? "Remove from Spellbook" : "Prepare Spell"}
           </button>
         </div>
       </header>
 
+      {/* Detail Grid: Stats and Description */}
       <div className="detail-grid">
         <aside>
           <dl className="detail-stats">
@@ -130,19 +135,23 @@ function SpellDetailPage() {
           </dl>
         </aside>
 
+        {/* Description Section with Conditional Higher Levels */}
         <section className="detail-description">
-          <h3 className="section-title">Description</h3>
-          {spell.desc?.map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
+          <div className="description-block">
+            <h3 className="section-title">Description</h3>
+            {spell.desc?.map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
 
-          {spell.higher_level && spell.higher_level.length > 0 && (
-            <>
+          {/* Conditional Rendering for Higher Levels */}
+          {spell.higher_level?.length > 0 && (
+            <div className="description-block" style={{ marginTop: "1.5rem" }}>
               <h4 className="section-subtitle">At Higher Levels</h4>
               {spell.higher_level.map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
-            </>
+            </div>
           )}
         </section>
       </div>
