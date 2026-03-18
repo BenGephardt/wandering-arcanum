@@ -6,7 +6,7 @@ export function usePreparedSpells() {
   const ctx = useContext(PreparedSpellsContext);
   if (!ctx) {
     throw new Error(
-      "usePreparedSpells must be used within a PreparedSpellsProvider"
+      "usePreparedSpells must be used within a PreparedSpellsProvider",
     );
   }
   return ctx;
