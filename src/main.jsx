@@ -1,21 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Providers } from "./components/Providers.jsx";
 import App from "./App.jsx";
 import "./index.css";
-import { ThemeProvider } from "./theme/ThemeProvider.jsx";
-import { PreparedSpellsProvider } from "./spellbook/PreparedSpellsProvider.jsx";
-import { BrowserRouter } from "react-router-dom";
 
 // The main entry point of the application.
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <PreparedSpellsProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </PreparedSpellsProvider>
-    </ThemeProvider>
+    <Providers>
+      <App />
+    </Providers>
   </StrictMode>,
 );
 
