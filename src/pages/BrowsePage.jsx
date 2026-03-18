@@ -5,49 +5,54 @@ import "./BrowsePage.css";
 
 const API_BASE = "https://www.dnd5eapi.co";
 
-// Responsible for fetching and enriching spells from the 5e API.
 function BrowsePage() {
-  // --- CORE DATA ---
-  // Lightweight list of spell names and URLs from the API
   const [masterRoster, setMasterRoster] = useState([]);
-  // Spell data actively rendered on the screen
   const [displayedSpells, setDisplayedSpells] = useState([]);
-  // Pagination tracker to "slice" the next chunk of spells
   const [visibleCount, setVisibleCount] = useState(20);
-
-  // --- UI & FEEDBACK ---
-  // Toggles the "Consulting the Weave..." loading message
   const [loading, setLoading] = useState(true);
-  // Stores API failure messages for the user
   const [error, setError] = useState("");
 
-  // --- FILTERING & SEARCH ---
   const [search, setSearch] = useState("");
   const [levelFilter, setLevelFilter] = useState("all");
   const [schoolFilter, setSchoolFilter] = useState("all");
   const [classFilter, setClassFilter] = useState("all");
 
-  // --- GLOBAL STATE ---
-  // Custom hook to manage persistent spellbook additions
   const { preparedSpells, addSpell } = usePreparedSpells();
   const scrollPositionRef = useRef(0);
 
-  // Fetch the lightweight master roster exactly once.
+  // 1. Fetch the master list using the Intersection Strategy
   useEffect(() => {
     let cancelled = false;
-
-    // Fetches the basic spell index from the API, which contains minimal info.
     async function fetchRoster() {
       setLoading(true);
       setError("");
-      try {
-        const res = await fetch(`${API_BASE}/api/spells`);
-        if (!res.ok) throw new Error("Failed to fetch spell index");
-        const data = await res.json();
 
-        if (!cancelled) {
-          setMasterRoster(data.results || []);
+      const params = new URLSearchParams();
+      if (levelFilter !== "all") params.append("level", levelFilter);
+      if (schoolFilter !== "all") params.append("school", schoolFilter);
+      
+      const queryString = params.toString();
+      const baseSpellsUrl = queryString ? `${API_BASE}/api/spells?${queryString}` : `${API_BASE}/api/spells`;
+      const classSpellsUrl = classFilter !== "all" ? `${API_BASE}/api/classes/${classFilter}/spells` : null;
+
+      try {
+        const [baseRes, classRes] = await Promise.all([
+          fetch(baseSpellsUrl),
+          classSpellsUrl ? fetch(classSpellsUrl) : Promise.resolve(null)
+        ]);
+
+        if (!baseRes.ok) throw new Error("Failed to fetch base spells");
+        const baseData = await baseRes.json();
+        let finalRoster = baseData.results || [];
+
+        if (classRes) {
+          if (!classRes.ok) throw new Error("Failed to fetch class spells");
+          const classData = await classRes.json();
+          const classSpellIndexes = new Set(classData.results.map(s => s.index));
+          finalRoster = finalRoster.filter(s => classSpellIndexes.has(s.index));
         }
+
+        if (!cancelled) setMasterRoster(finalRoster);
       } catch (e) {
         console.error(e);
         if (!cancelled) setError("Unable to fetch spells. Please try again.");
@@ -55,102 +60,74 @@ function BrowsePage() {
     }
 
     fetchRoster();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    return () => { cancelled = true; };
+  }, [levelFilter, schoolFilter, classFilter]);
 
-  // Fetch full details only for the visible chunk of spells.
+  // 2. Filter the master list by Name
+  const filteredMasterRoster = useMemo(() => {
+    if (!search.trim()) return masterRoster;
+    const q = search.trim().toLowerCase();
+    return masterRoster.filter((spell) => spell.name.toLowerCase().includes(q));
+  }, [masterRoster, search]);
+
+  // 3. Debounced fetch for spell details
   useEffect(() => {
-    // This flag helps prevent state updates if the component unmounts during fetch.
     let cancelled = false;
 
-    // If the master roster hasn't loaded yet, there's nothing to fetch.
-    if (masterRoster.length === 0) return;
-
-    // Fetches detailed spell data for the currently visible chunk of spells.
-    async function fetchSpellDetails() {
-      setLoading(true);
-
-      const chunkToFetch = masterRoster.slice(0, visibleCount);
-
-      try {
-        const detailPromises = chunkToFetch.map(async (spell) => {
-          try {
-            const detailRes = await fetch(`${API_BASE}${spell.url}`);
-            if (!detailRes.ok) throw new Error("Failed to fetch spell detail");
-            const detail = await detailRes.json();
-            return {
-              index: detail.index,
-              name: detail.name,
-              level: detail.level,
-              school: detail.school,
-              classes: detail.classes,
-            };
-          } catch {
-            return {
-              index: spell.index,
-              name: spell.name,
-              level: null,
-              school: null,
-              classes: [],
-            };
-          }
-        });
-
-        const enriched = await Promise.all(detailPromises);
-
-        if (!cancelled) {
-          setDisplayedSpells(enriched);
-        }
-      } catch (e) {
-        console.error("Failed to fetch detailed data:", e);
-      } finally {
-        if (!cancelled) setLoading(false);
+    const timer = setTimeout(() => {
+      if (filteredMasterRoster.length === 0) {
+        setDisplayedSpells([]);
+        setLoading(false);
+        return;
       }
-    }
 
-    fetchSpellDetails();
+      async function fetchSpellDetails() {
+        setLoading(true);
+        const chunkToFetch = filteredMasterRoster.slice(0, visibleCount);
+
+        try {
+          const detailPromises = chunkToFetch.map(async (spell) => {
+            try {
+              const detailRes = await fetch(`${API_BASE}${spell.url}`);
+              if (!detailRes.ok) throw new Error("API Limit Reached");
+              const detail = await detailRes.json();
+              return {
+                index: detail.index,
+                name: detail.name,
+                level: detail.level,
+                school: detail.school,
+                classes: detail.classes,
+              };
+            } catch {
+              return {
+                index: spell.index,
+                name: spell.name,
+                level: null,
+                school: null,
+                classes: [],
+              };
+            }
+          });
+
+          const enriched = await Promise.all(detailPromises);
+          if (!cancelled) setDisplayedSpells(enriched);
+        } catch (e) {
+          console.error("Failed to scribe spell details:", e);
+        } finally {
+          if (!cancelled) setLoading(false);
+        }
+      }
+
+      fetchSpellDetails();
+    }, 400);
+
     return () => {
       cancelled = true;
+      clearTimeout(timer);
     };
-  }, [masterRoster, visibleCount]);
+  }, [filteredMasterRoster, visibleCount]);
 
-  // Applies search and filter criteria to the currently loaded spells.
-  const filteredSpells = useMemo(() => {
-    // Start with the spells that have been loaded so far.
-    let list = displayedSpells;
-
-    // Apply search filter if there's a query.
-    if (search.trim()) {
-      const q = search.trim().toLowerCase();
-      list = list.filter((spell) => spell.name.toLowerCase().includes(q));
-    }
-
-    // Apply level filter if it's not set to "all".
-    if (levelFilter !== "all") {
-      const levelNum = Number(levelFilter);
-      list = list.filter((spell) => spell.level === levelNum);
-    }
-
-    // Apply school filter if it's not set to "all".
-    if (schoolFilter !== "all") {
-      list = list.filter(
-        (spell) => spell.school && spell.school.index === schoolFilter,
-      );
-    }
-
-    // Apply class filter if it's not set to "all".
-    if (classFilter !== "all") {
-      list = list.filter((spell) =>
-        spell.classes?.some((c) => c.index === classFilter),
-      );
-    }
-
-    return list;
-  }, [displayedSpells, search, levelFilter, schoolFilter, classFilter]);
-
-  // Static options for spell levels with dynamic options.
+  // 4. Static Dropdowns
   const levelOptions = [
     { value: "all", label: "All Levels" },
     { value: "0", label: "Cantrip" },
@@ -165,142 +142,122 @@ function BrowsePage() {
     { value: "9", label: "9th" },
   ];
 
-  // Dynamically generates school options based on the currently displayed spells.
-  const schoolOptions = useMemo(() => {
-    // Use a Map to ensure uniqueness of schools.
-    const unique = new Map();
+  const schoolOptions = [
+    { value: "all", label: "All Schools" },
+    { value: "abjuration", label: "Abjuration" },
+    { value: "conjuration", label: "Conjuration" },
+    { value: "divination", label: "Divination" },
+    { value: "enchantment", label: "Enchantment" },
+    { value: "evocation", label: "Evocation" },
+    { value: "illusion", label: "Illusion" },
+    { value: "necromancy", label: "Necromancy" },
+    { value: "transmutation", label: "Transmutation" }
+  ];
 
-    // Iterate over displayed spells and collect unique schools.
-    displayedSpells.forEach((spell) => {
-      if (spell.school) unique.set(spell.school.index, spell.school.name);
-    });
+  const classOptions = [
+    { value: "all", label: "All Classes" },
+    { value: "bard", label: "Bard" },
+    { value: "cleric", label: "Cleric" },
+    { value: "druid", label: "Druid" },
+    { value: "paladin", label: "Paladin" },
+    { value: "ranger", label: "Ranger" },
+    { value: "sorcerer", label: "Sorcerer" },
+    { value: "warlock", label: "Warlock" },
+    { value: "wizard", label: "Wizard" }
+  ];
 
-    // Start with the "All Schools" option, then add the unique schools from the displayed spells.
-    return [
-      { value: "all", label: "All Schools" },
-      ...Array.from(unique.entries()).map(([value, label]) => ({
-        value,
-        label,
-      })),
-    ];
-  }, [displayedSpells]);
-
-  const classOptions = useMemo(() => {
-    // Use a Map to ensure uniqueness of classes.
-    const unique = new Map();
-
-    // Iterate over displayed spells and collect unique classes.
-    displayedSpells.forEach((spell) => {
-      (spell.classes || []).forEach((cls) => {
-        unique.set(cls.index, cls.name);
-      });
-    });
-
-    // Start with the "All Classes" option, then add the unique classes from the displayed spells.
-    return [
-      { value: "all", label: "All Classes" },
-      ...Array.from(unique.entries()).map(([value, label]) => ({
-        value,
-        label,
-      })),
-    ];
-  }, [displayedSpells]);
-
-  // Resets all filters to their default state.
+  // 📍 THE FIX: Reset filters now smoothly scrolls you back to the top
   const resetFilters = () => {
     setSearch("");
     setLevelFilter("all");
     setSchoolFilter("all");
     setClassFilter("all");
+    setVisibleCount(20);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Increases the visible count to load more spells when the "Load More" button is clicked.
   const handleLoadMore = () => {
-    // Save current position to our "bookmark"
     scrollPositionRef.current = window.scrollY;
-
-    // Trigger the fetch
     setVisibleCount((prev) => prev + 20);
   };
 
+  // 📍 THE FIX: Consume the bookmark so it doesn't randomly trigger later
   useEffect(() => {
-    // Only scroll if we have a saved position (prevents jump on first load)
     if (scrollPositionRef.current > 0 && !loading) {
       window.scrollTo({
         top: scrollPositionRef.current,
-        behavior: "instant", // "instant" is often better for preventing the "flash" of jumping
+        behavior: "instant",
       });
-
-      // Optional: Reset bookmark after using it
-      // scrollPositionRef.current = 0;
+      scrollPositionRef.current = 0; 
     }
   }, [displayedSpells, loading]);
 
-  // Renders the browse page with a sidebar for filters and a main section for displaying spells.
   return (
     <div className="page-browse">
       <aside className="sidebar-filters" aria-label="Spell filters">
         <h2 className="page-title">Spell Index</h2>
 
-        {/* --- FILTER FIELDS --- */}
         <label className="field">
           <span className="field-label">Search</span>
           <input
             type="text"
             className="input"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setVisibleCount(20);
+              window.scrollTo(0, 0); // 📍 Snap to top
+            }}
             placeholder="Search by name..."
           />
         </label>
 
         <label className="field">
           <span className="field-label">Level</span>
-          <select
-            className="input input-select"
-            value={levelFilter}
-            onChange={(e) => setLevelFilter(e.target.value)}
+          <select 
+            className="input input-select" 
+            value={levelFilter} 
+            onChange={(e) => { 
+              setLevelFilter(e.target.value); 
+              setVisibleCount(20); 
+              window.scrollTo(0, 0); // 📍 Snap to top
+            }}
           >
-            {levelOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
+            {levelOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
           </select>
         </label>
 
         <label className="field">
           <span className="field-label">School</span>
-          <select
-            className="input input-select"
-            value={schoolFilter}
-            onChange={(e) => setSchoolFilter(e.target.value)}
+          <select 
+            className="input input-select" 
+            value={schoolFilter} 
+            onChange={(e) => { 
+              setSchoolFilter(e.target.value); 
+              setVisibleCount(20); 
+              window.scrollTo(0, 0); // 📍 Snap to top
+            }}
           >
-            {schoolOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
+            {schoolOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
           </select>
         </label>
 
         <label className="field">
           <span className="field-label">Class</span>
-          <select
-            className="input input-select"
-            value={classFilter}
-            onChange={(e) => setClassFilter(e.target.value)}
+          <select 
+            className="input input-select" 
+            value={classFilter} 
+            onChange={(e) => { 
+              setClassFilter(e.target.value); 
+              setVisibleCount(20); 
+              window.scrollTo(0, 0); // 📍 Snap to top
+            }}
           >
-            {classOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
+            {classOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
           </select>
         </label>
       </aside>
 
-      {/* --- SPELL GRID & STATES --- */}
       <section className="spell-grid-section">
         {loading && displayedSpells.length === 0 && (
           <p className="status status-loading">Consulting the Weave...</p>
@@ -308,34 +265,23 @@ function BrowsePage() {
 
         {!loading && error && <p className="status status-error">{error}</p>}
 
-        {!error && displayedSpells.length > 0 && (
+        {!error && (displayedSpells.length > 0 || search || levelFilter !== "all" || schoolFilter !== "all" || classFilter !== "all") && (
           <>
-            {filteredSpells.length === 0 ? (
+            {displayedSpells.length === 0 && !loading ? (
               <div className="empty-state-container">
                 <p className="empty-state-text">
-                  The Weave reveals a magical void. No spell matches these
-                  parameters in our current mortal world.
+                  The Weave reveals a magical void. No spell matches these parameters in our current mortal world.
                 </p>
-                <button className="btn btn-ghost" onClick={resetFilters}>
-                  Clear Filters
-                </button>
+                <button className="btn btn-ghost" onClick={resetFilters}>Clear Filters</button>
               </div>
             ) : (
               <>
                 <p className="field-label" style={{ marginBottom: "1rem" }}>
-                  Showing {filteredSpells.length} of {displayedSpells.length}{" "}
-                  spells
+                  Showing {displayedSpells.length} of {filteredMasterRoster.length} spells
                 </p>
-                <div
-                  className="spell-grid"
-                  role="list"
-                  aria-label="Spell search results"
-                >
-                  {filteredSpells.map((spell) => {
-                    const isPrepared = preparedSpells.some(
-                      (s) => s.index === spell.index,
-                    );
-
+                <div className="spell-grid" role="list" aria-label="Spell search results">
+                  {displayedSpells.map((spell) => {
+                    const isPrepared = preparedSpells.some((s) => s.index === spell.index);
                     return (
                       <SpellCard
                         key={spell.index}
@@ -348,24 +294,13 @@ function BrowsePage() {
                   })}
                 </div>
 
-                {/* Load More Button */}
-                {!search &&
-                  levelFilter === "all" &&
-                  schoolFilter === "all" &&
-                  classFilter === "all" &&
-                  visibleCount < masterRoster.length && (
-                    <div className="load-more-container">
-                      <button
-                        className="btn btn-load-more"
-                        onClick={handleLoadMore}
-                        disabled={loading}
-                      >
-                        {loading
-                          ? "Scribing more spells..."
-                          : "Load More Spells"}
-                      </button>
-                    </div>
-                  )}
+                {visibleCount < filteredMasterRoster.length && (
+                  <div className="load-more-container">
+                    <button className="btn btn-load-more" onClick={handleLoadMore} disabled={loading}>
+                      {loading ? "Scribing more spells..." : "Load More Spells"}
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </>
