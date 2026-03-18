@@ -2,23 +2,29 @@
 .page-detail {
   position: relative;
   background-color: var(--color-bg-elevated);
-  background-image: 
+  background-image:
     var(--texture-paper),
-    radial-gradient(ellipse at center, transparent 40%, rgba(106, 87, 64, 0.12) 100%);
+    radial-gradient(
+      ellipse at center,
+      transparent 40%,
+      rgba(106, 87, 64, 0.12) 100%
+    );
   background-blend-mode: multiply, normal;
 
   border-radius: var(--radius-card);
   border: 2px solid var(--color-border-subtle);
-  box-shadow: var(--shadow-soft), inset 0 0 40px rgba(0, 0, 0, 0.05);
-  
-  padding: 1.5rem; 
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 0 40px rgba(0, 0, 0, 0.05);
+
+  padding: 1.5rem;
   overflow: hidden;
 }
 
 /* --- DARK & DARKVISION ADJUSTMENTS --- */
 :root[data-theme="dark"] .page-detail,
 :root[data-theme="darkvision"] .page-detail {
-  background-image: 
+  background-image:
     var(--texture-paper),
     radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
   background-blend-mode: overlay, normal;
@@ -109,7 +115,7 @@
   .detail-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  
+
   .page-detail {
     padding: 1.2rem;
   }
