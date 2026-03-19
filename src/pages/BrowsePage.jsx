@@ -48,7 +48,7 @@ const CLASS_OPTIONS = [
 
 // Main page for browsing and filtering spells from the API, with options to prepare spells directly from the list.
 function BrowsePage() {
-  const [masterRoster, setMasterRoster] = useState([]);
+  const [masterRoster, setMasterRoster] = useState(null);
   const [displayedSpells, setDisplayedSpells] = useState([]);
   const [visibleCount, setVisibleCount] = useState(21);
   const [loading, setLoading] = useState(true);
@@ -275,23 +275,28 @@ function BrowsePage() {
 
       {/* MAIN CONTENT */}
       <section className="spell-grid-section">
-        {loading && displayedSpells.length === 0 && (
-          <p className="status status-loading">Consulting the Weave...</p>
+        {displayedSpells.length === 0 && !error && (
+          <div className="empty-state-container">
+            {masterRoster === null ||
+            loading ||
+            (filteredMasterRoster.length > 0 &&
+              displayedSpells.length === 0) ? (
+              <p className="status status-loading">Consulting the Weave...</p>
+            ) : (
+              <div className="empty-state-content">
+                <p className="empty-state-text">
+                  The Weave reveals a magical void. No spell matches these
+                  parameters.
+                </p>
+                <button className="btn btn-ghost" onClick={resetFilters}>
+                  Clear Filters
+                </button>
+              </div>
+            )}
+          </div>
         )}
 
         {error && <p className="status status-error">{error}</p>}
-
-        {!loading && displayedSpells.length === 0 && !error && (
-          <div className="empty-state-container">
-            <p className="empty-state-text">
-              The Weave reveals a magical void. No spell matches these
-              parameters.
-            </p>
-            <button className="btn btn-ghost" onClick={resetFilters}>
-              Clear Filters
-            </button>
-          </div>
-        )}
 
         {displayedSpells.length > 0 && (
           <>
