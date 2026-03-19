@@ -32,7 +32,7 @@ function SpellCard({ spell, actionLabel, onAction, disabled = false }) {
   );
 
   return (
-    <article className="spell-card" role="listitem" style={cardStyle}>
+    <article className="spell-card" style={cardStyle}>
       <div className="spell-card-inner">
         <h3 className="spell-title">
           <Link to={`/spell/${index}`} className="spell-title-link">
