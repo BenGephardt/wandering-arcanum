@@ -17,13 +17,13 @@
 .app-header {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 1000;
   backdrop-filter: blur(10px);
   background: linear-gradient(
     to bottom,
-    rgba(249, 247, 241, 0.92),
-    rgba(249, 247, 241, 0.8)
-  );
+    rgba(249, 247, 241, 0.98),
+    rgba(249, 247, 241, 0.9)
+  ), var(--texture-paper);
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
@@ -33,7 +33,7 @@
     to bottom,
     rgba(26, 18, 13, 0.96),
     rgba(26, 18, 13, 0.84)
-  );
+  ), var(--texture-paper);
 }
 
 :root[data-theme="darkvision"] .app-header {
@@ -41,7 +41,7 @@
     to bottom,
     rgba(15, 16, 17, 0.96),
     rgba(15, 16, 17, 0.84)
-  );
+  ), var(--texture-paper);
 }
 
 .header-inner {
