@@ -363,6 +363,7 @@ body {
 
 /* --- 8. RESPONSIVE ADJUSTMENTS --- */
 @media (max-width: 768px) {
+  /* Header & Branding Layout */
   .header-inner {
     flex-direction: column;
     gap: 1.25rem;
@@ -399,5 +400,32 @@ body {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
+  }
+
+  /* Sticky Mobile Filter Grid */
+  .sidebar-filters {
+    position: sticky;
+    top: 0; /* Changed to 0 so it locks to the top of the viewport */
+    z-index: 100;
+
+    background: var(--color-bg-elevated);
+    padding: 0.75rem;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two-column grid for efficiency */
+    gap: 0.5rem;
+  }
+
+  /* Compact Search Bar - spans both columns */
+  .sidebar-filters .field:first-of-type {
+    grid-column: span 2;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Hide the title on mobile to maximize screen real estate */
+  .sidebar-filters .page-title {
+    display: none;
   }
 }
