@@ -6,14 +6,15 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/cinzel-v19-latin-regular.woff2") format("woff2");
+  src: url("/fonts/cinzel-v26-latin-regular.woff2") format("woff2");
 }
+
 @font-face {
   font-family: "Cinzel";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("/fonts/cinzel-v19-latin-700.woff2") format("woff2");
+  src: url("/fonts/cinzel-v26-latin-700.woff2") format("woff2");
 }
 
 /* Crimson Text - Body & Flavor */
@@ -22,8 +23,9 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/crimson-text-v19-latin-regular.woff2") format("woff2");
+  src: url("/fonts/crimson-text-v20-latin-regular.woff2") format("woff2");
 }
+
 @font-face {
   font-family: "Crimson Text";
   font-style: italic;
@@ -38,14 +40,15 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/lato-v24-latin-regular.woff2") format("woff2");
+  src: url("/fonts/lato-v25-latin-regular.woff2") format("woff2");
 }
+
 @font-face {
   font-family: "Lato";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("/fonts/lato-v24-latin-700.woff2") format("woff2");
+  src: url("/fonts/lato-v25-latin-700.woff2") format("woff2");
 }
 
 /* --- 2. GLOBAL RESET & BASE --- */
