@@ -182,7 +182,7 @@ function BrowsePage() {
       } finally {
         if (!cancelled) setLoading(false);
       }
-    }, 400);
+    }, 250);
 
     return () => {
       cancelled = true;
