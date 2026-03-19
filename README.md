@@ -3,7 +3,7 @@
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-> **[🚀 View the Live Application](https://bengephardt.github.io/wandering-arcanum/)**
+> **[🚀 View the Live Application](https://wandering-arcanum.vercel.app)**
 >
 > _A high-performance, PWA-enabled 5e spell management tool built with React 18._
 
@@ -126,7 +126,7 @@ Achieving the "Arcane Grimoire" aesthetic required a complex double-border syste
 ## 🖋️ Acknowledgements
 
 - Data provided by the fantastic [D&D 5e API](https://www.dnd5eapi.co/).
-- UI/UX built with best practices from [Codecademy](https://www.codecademy.com/) and [Launch School](https://launchschool.com).
+- Built with guidance and the core engineering foundations developed through [Launch School](https://launchschool.com) and [Codecademy](https://www.codecademy.com).
 - Fonts provided by [Google Fonts](https://fonts.google.com/) (Cinzel, Crimson Text, Lato).
 
 ## ⚖️ Legal Attribution
