@@ -292,12 +292,12 @@ body {
 }
 
 .empty-state-text {
-  max-width: 450px;
+  max-width: 550px;
   margin: 0 0 1.2rem 0;
 
   color: var(--color-ink-muted);
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 1.35rem;
   font-style: italic;
   line-height: 1.6;
 }
