@@ -1,17 +1,17 @@
 /* --- SPELL CARD BASE STYLE --- */
 .spell-card {
-  /* 1. Variables First */
+  /* Variables */
   --spell-card-vignette-color: rgba(106, 87, 64, 0.12);
   --spell-card-vignette-stop: 30%;
   --spell-card-vignette-blend: multiply;
   --spell-card-inner-inset: 6px;
 
-  /* 2. Layout & Positioning */
+  /* Layout & Positioning */
   position: relative;
   padding: 0;
   overflow: hidden;
 
-  /* 3. Surface & Visuals */
+  /* Surface & Visuals */
   background-color: var(--color-bg-elevated);
   background-image:
     var(--texture-paper),
@@ -27,7 +27,9 @@
     var(--shadow-soft),
     inset 0 0 20px rgba(142, 142, 142, 0.05);
 
-  /* 4. Performance & Animations */
+  /* Performance & Animations */
+  content-visibility: auto;
+  contain-intrinsic-size: 250px;
   transform: translateZ(0);
   transition:
     transform var(--transition-fast),
