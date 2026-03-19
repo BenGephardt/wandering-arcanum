@@ -134,7 +134,9 @@ function BrowsePage() {
 
   // Filter by Name (useMemo)
   const filteredMasterRoster = useMemo(() => {
+    if (!masterRoster) return [];
     const q = search.trim().toLowerCase();
+
     if (!q) return masterRoster;
     return masterRoster.filter((spell) => spell.name.toLowerCase().includes(q));
   }, [masterRoster, search]);
@@ -144,7 +146,7 @@ function BrowsePage() {
     let cancelled = false;
 
     const timer = setTimeout(async () => {
-      if (filteredMasterRoster.length === 0) {
+      if (!filteredMasterRoster || filteredMasterRoster.length === 0) {
         setDisplayedSpells([]);
         setLoading(false);
         return;
@@ -279,7 +281,7 @@ function BrowsePage() {
           <div className="empty-state-container">
             {masterRoster === null ||
             loading ||
-            (filteredMasterRoster.length > 0 &&
+            (filteredMasterRoster?.length > 0 &&
               displayedSpells.length === 0) ? (
               <p className="status status-loading">Consulting the Weave...</p>
             ) : (
@@ -301,8 +303,8 @@ function BrowsePage() {
         {displayedSpells.length > 0 && (
           <>
             <p className="field-label" style={{ marginBottom: "1rem" }}>
-              Showing {displayedSpells.length} of {filteredMasterRoster.length}{" "}
-              spells
+              Showing {displayedSpells.length} of{" "}
+              {filteredMasterRoster?.length || 0} spells
             </p>
             <div className="spell-grid">
               {displayedSpells.map((spell) => {
@@ -321,7 +323,7 @@ function BrowsePage() {
               })}
             </div>
 
-            {visibleCount < filteredMasterRoster.length && (
+            {visibleCount < (filteredMasterRoster?.length || 0) && (
               <div className="load-more-container">
                 <button
                   className="btn btn-load-more"
