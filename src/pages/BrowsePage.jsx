@@ -275,13 +275,13 @@ function BrowsePage() {
 
       {/* MAIN CONTENT */}
       <section className="spell-grid-section">
-        {loading && (
+        {loading && displayedSpells.length === 0 && (
           <p className="status status-loading">Consulting the Weave...</p>
         )}
 
-        {error && !loading && <p className="status status-error">{error}</p>}
+        {error && <p className="status status-error">{error}</p>}
 
-        {!loading && filteredMasterRoster.length === 0 && !error && (
+        {!loading && displayedSpells.length === 0 && !error && (
           <div className="empty-state-container">
             <p className="empty-state-text">
               The Weave reveals a magical void. No spell matches these
