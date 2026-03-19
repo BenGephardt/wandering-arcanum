@@ -304,7 +304,7 @@ function BrowsePage() {
               Showing {displayedSpells.length} of {filteredMasterRoster.length}{" "}
               spells
             </p>
-            <div className="spell-grid" role="list">
+            <div className="spell-grid">
               {displayedSpells.map((spell) => {
                 const isPrepared = preparedSpells.some(
                   (s) => s.index === spell.index,
