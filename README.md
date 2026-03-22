@@ -2,6 +2,7 @@
 
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Lighthouse 100](https://img.shields.io/badge/lighthouse-100%25-brightgreen?style=for-the-badge&logo=lighthouse&logoColor=white)
 
 > **[🚀 View the Live Application](https://wandering-arcanum.vercel.app)**
 >
