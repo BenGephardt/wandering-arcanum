@@ -78,7 +78,7 @@ To prevent the app from triggering dozens of unnecessary API calls during rapid 
 
 ### 3. Offline-First Caching
 
-Spell data doesn't change, so re-fetching it is wasted time. I wrote a **custom service worker** that intercepts only requests to the 5e API — leaving local assets alone so hot-reloading still works in development. It uses a cache-first strategy: if a spell is already in the cache it returns instantly; otherwise it fetches, validates the response status and type, clones the stream (a response body can only be consumed once), and stores the copy. The result is instant repeat lookups and a spellbook that keeps working when the wifi at the table doesn't.
+Spell data doesn't change, so re-fetching it is wasted time. I wrote a **custom service worker** that intercepts only requests to the 5e API, leaving local assets alone so hot-reloading still works in development. It uses a cache-first strategy: if a spell is already in the cache it returns instantly; otherwise it fetches, validates the response status and type, clones the stream (a response body can only be consumed once), and stores the copy. The result is instant repeat lookups and a spellbook that keeps working when the wifi at the table doesn't.
 
 </details>
 
